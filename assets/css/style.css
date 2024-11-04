@@ -1,0 +1,196 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('https://digitalsynopsis.com/wp-content/uploads/2014/06/supercar-wallpapers-bugatti-1.jpg');
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    text-align: center; /* Moved to avoid redundancy */
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.navbar a {
+    margin: 0 15px; /* Adjusted for consistency */
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.navbar a:hover {
+    color: #4CAF50;
+}
+
+h2 {
+    text-align: center;
+    color: #eeeeee;
+    margin-bottom: 20px; 
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 93%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+table {
+    border-collapse: collapse;
+    width: 50%;
+    margin: 20px auto; /* Added margin for spacing */
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: left;
+    color: black;
+    font-size: 18px; /* Adjusted font size */
+    border: 1px solid rgba(255, 255, 255, 1);
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.searchform {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.searchform input[type="text"],
+.searchform select {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-top: 13px;
+}
+
+.searchform input[type="text"] {
+    width: 150px;
+}
+
+.searchform select {
+    width: 120px;
+}
+
+.searchform button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.searchform button:hover {
+    background-color: #45a049;
+}
+
+.registerform {
+    background-color: rgba(163, 162, 162, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navbar #logoutButton {
+    background-color: rgb(243, 78, 78);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.navbar #logoutButton:hover {
+    background-color: #d32f2f;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin-top: 60px; 
+    color: #eeeeee; 
+}
+
+.centered-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; 
+}
+
+.centered-form form {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="text"] {
+    width: 200px; 
+}
+
+button {
+    padding: 10px 15px; 
+}
+
+.delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: darkred; 
+}
+
+.logout-button {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: darkred; 
+}

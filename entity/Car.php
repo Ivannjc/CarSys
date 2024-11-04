@@ -1,0 +1,1 @@
+<!-- Car listing entity model -->
