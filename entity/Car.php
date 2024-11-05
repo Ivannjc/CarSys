@@ -62,14 +62,30 @@ class Car
         return $cars;
     }
 
+    // Add Car
     public function addCar($make, $model, $year, $color, $price, $transmission, $description)
-{
-    $stmt = $this->conn->prepare("INSERT INTO cars (make, model, year, color, price, transmission, description) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    
-    // Update the bind_param to match the modified SQL
-    $stmt->bind_param("ssissss", $make, $model, $year, $color, $price, $transmission, $description);
-    
-    return $stmt->execute();
-}
+    {
+        $stmt = $this->conn->prepare("INSERT INTO cars (make, model, year, color, price, transmission, description) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
+        // Corrected the bind_param to match the types
+        $stmt->bind_param("ssissss", $make, $model, $year, $color, $price, $transmission, $description);
+
+        return $stmt->execute();
+    }
+
+    // Update Car
+    public function updateCar($carId, $price, $description)
+    {
+        $stmt = $this->conn->prepare("UPDATE cars SET price = ?, description = ? WHERE car_id = ?");
+        $stmt->bind_param("ssi", $price, $description, $carId);
+        return $stmt->execute();
+    }
+
+    // Delete Car
+    public function deleteCar($carId)
+    {
+        $stmt = $this->conn->prepare("DELETE FROM cars WHERE car_id = ?");
+        $stmt->bind_param("i", $carId);
+        return $stmt->execute();
+    }
 }

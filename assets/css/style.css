@@ -197,47 +197,20 @@ button {
     background-color: darkred; 
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-select,
-textarea {
-    width: 100%; /* Set all fields to take full width of the form */
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    box-sizing: border-box; /* Include padding and border in width calculation */
-}
-
-textarea {
-    height: 100px; /* Set a specific height for the textarea */
-}
-
-button {
-    width: 100%; /* Keep buttons the same width */
-    padding: 10px;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    font-size: 16px;
+.updateCarList {
+    padding: 5px 10px;
+    font-size: 18px; 
+    width: auto; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    background-color: #007bff; 
+    color: white; 
     cursor: pointer;
+    transition: background-color 0.3s; 
 }
 
-button:hover {
-    background-color: #45a049;
+.updateCarList:hover {
+    background-color: #0056b3; /* Change background color on hover */
 }
 
-.registerform {
-    background-color: rgba(163, 162, 162, 0.9);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px; 
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* Ensure items fill the available width */
-}
+

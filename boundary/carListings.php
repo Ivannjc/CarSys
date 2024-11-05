@@ -11,21 +11,24 @@
             const message = urlParams.get('message');
             if (message) {
                 alert(message);
-                window.location.href = 'carListings.php'; // Clears the message from the URL
+                window.location.href = '../boundary/carListings.php'; 
             }
         };
     </script>
 </head>
 
 <body>
-    <!-- Navbar with link to manageCarListings and search form -->
     <div class="navbar">
-        <a href="addCarListings.php">Add Car Listings</a>
+        <a href="carListings.php">View Car Listings</a>
+        <a href="addCarListings.php">Create Car Listing</a>
         <form action="carListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
             <input type="text" name="model" placeholder="Search by Model" value="<?php echo isset($_GET['model']) ? htmlspecialchars($_GET['model']) : ''; ?>">
             <input type="text" name="year" placeholder="Search by Year" value="<?php echo isset($_GET['year']) ? htmlspecialchars($_GET['year']) : ''; ?>">
             <button type="submit">Search</button>
+        </form>
+        <form action="../controller/logoutController.php" method="POST" style="display:inline;">
+            <button class="logout-button" type="submit">Logout</button>
         </form>
     </div>
 
@@ -34,7 +37,6 @@
     <?php
     include '../controller/CarController.php';
 
-    // Handle search query parameters
     $carController = new CarController();
     $filters = [];
     if (isset($_GET['make']) && !empty($_GET['make'])) {
@@ -49,38 +51,56 @@
     $cars = $carController->getCarListings($filters);
     ?>
 
-    <?php if (!empty($cars)): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Year</th>
-                    <th>Color</th>
-                    <th>Price</th>
-                    <th>Transmission</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($cars as $car): ?>
+    <form action="../controller/CarController.php" method="POST">
+        <?php if (!empty($cars)): ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($car['car_id']); ?></td>
-                        <td><?php echo htmlspecialchars($car['make']); ?></td>
-                        <td><?php echo htmlspecialchars($car['model']); ?></td>
-                        <td><?php echo htmlspecialchars($car['year']); ?></td>
-                        <td><?php echo htmlspecialchars($car['color']); ?></td>
-                        <td><?php echo htmlspecialchars($car['price']); ?></td>
-                        <td><?php echo htmlspecialchars($car['transmission']); ?></td>
-                        <td><?php echo htmlspecialchars($car['description']); ?></td>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                        <th>Transmission</th>
+                        <th>Description</th>
+                        <th>Delete Car Listing</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p style="color: white;">No car listings found.</p>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($cars as $car): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($car['make']); ?></td>
+                            <td><?php echo htmlspecialchars($car['model']); ?></td>
+                            <td><?php echo htmlspecialchars($car['year']); ?></td>
+                            <td><?php echo htmlspecialchars($car['color']); ?></td>
+                            <td>
+                                <input type="number" name="price[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['price']); ?>" required>
+                            </td>
+                            <td>
+                                <select name="transmission[]" disabled>
+                                    <option value="Automatic" <?php echo htmlspecialchars($car['transmission']) == 'Automatic' ? 'selected' : ''; ?>>Automatic</option>
+                                    <option value="Manual" <?php echo htmlspecialchars($car['transmission']) == 'Manual' ? 'selected' : ''; ?>>Manual</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="description[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['description']); ?>" required>
+                            </td>
+                            <td>
+                                <form action="../controller/CarController.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="car_id" value="<?php echo htmlspecialchars($car['car_id']); ?>">
+                                    <button type="submit" name="delete" class="delete-button">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <input type="hidden" name="update" value="1">
+            <button type="submit" class="updateCarList">Update</button>
+        <?php else: ?>
+            <p style="color: white;">No car listings found.</p>
+        <?php endif; ?>
+    </form>
 </body>
 
 </html>
