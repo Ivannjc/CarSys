@@ -7,18 +7,16 @@ class CarController
 
     public function __construct()
     {
-        $this->car = new Car(); // No need to pass the connection now
+        $this->car = new Car();
     }
 
-    // Method to get car listings
     public function getCarListings($filters = [])
     {
         return $this->car->getAllCars($filters);
     }
 
-    // Method to add a new car
-    public function addCar($make, $model, $year, $color, $mileage, $price, $transmission, $fuel_type, $condition, $description)
+    public function addCar($make, $model, $year, $color, $price, $transmission, $description)
     {
-        return $this->car->addCar($make, $model, $year, $color, $mileage, $price, $transmission, $fuel_type, $condition, $description);
+        return $this->car->addCar($make, $model, $year, $color, $price, $transmission, $description);
     }
 }

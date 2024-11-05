@@ -20,7 +20,7 @@
 <body>
     <!-- Navbar with link to manageCarListings and search form -->
     <div class="navbar">
-        <a href="manageCarListings.php">Manage Car Listings</a>
+        <a href="addCarListings.php">Add Car Listings</a>
         <form action="carListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
             <input type="text" name="model" placeholder="Search by Model" value="<?php echo isset($_GET['model']) ? htmlspecialchars($_GET['model']) : ''; ?>">
