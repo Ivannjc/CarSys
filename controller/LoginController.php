@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../boundary/useradminPage.php");
                 } else {
                     // alter the condition according to different user role/profile
-                    header("Location: dashboard.php");
+                    header("Location: ../boundary/carListings.php");
                 }
                 exit();
             } else {

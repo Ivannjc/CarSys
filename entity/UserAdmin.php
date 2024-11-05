@@ -18,15 +18,6 @@ class UserAdmin
         }
         return $conn;
     }
-
-    public function getUserByUsernameOrEmail($identifier) {
-        // Assuming you have a PDO connection set up as $this->conn
-        $query = "SELECT * FROM users WHERE username = :identifier OR email = :identifier LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':identifier', $identifier);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC); // Return user data if found
-    }
     
 
     // Function to create a user
