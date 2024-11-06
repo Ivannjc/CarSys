@@ -24,11 +24,12 @@ class Car
         return $conn;
     }
 
-    public function getAllCars($filters = [])
+    public function getAllCars($created_by, $filters = [])
     {
-        $query = "SELECT car_id, make, model, year, color, price, transmission, description FROM cars WHERE 1=1";
-        $params = [];
-        $types = '';
+        $query = "SELECT car_id, make, model, year, color, price, description FROM cars WHERE created_by = ?";
+
+        $params = [$created_by];
+        $types = 's';
 
         if (!empty($filters['make'])) {
             $query .= " AND make LIKE ?";
@@ -47,45 +48,36 @@ class Car
         }
 
         $stmt = $this->conn->prepare($query);
-        if ($params) {
-            $stmt->bind_param($types, ...$params);
-        }
-
+        $stmt->bind_param($types, ...$params);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        $cars = [];
-        while ($car = $result->fetch_assoc()) {
-            $cars[] = $car;
-        }
-
-        return $cars;
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    // Add Car
-    public function addCar($make, $model, $year, $color, $price, $transmission, $description)
-    {
-        $stmt = $this->conn->prepare("INSERT INTO cars (make, model, year, color, price, transmission, description) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    public function addCar($make, $model, $year, $color, $price, $description, $created_by)
+{
+    // Prepare the SQL query with placeholders
+    $stmt = $this->conn->prepare("INSERT INTO cars (make, model, year, color, price, description, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    
+    $stmt->bind_param('ssisdss', $make, $model, $year, $color, $price, $description, $created_by);
+    
+    // Execute the query and return the result
+    return $stmt->execute();
+}
 
-        // Corrected the bind_param to match the types
-        $stmt->bind_param("ssissss", $make, $model, $year, $color, $price, $transmission, $description);
 
-        return $stmt->execute();
-    }
-
-    // Update Car
-    public function updateCar($carId, $price, $description)
+    public function updateCar($car_id, $price, $description)
     {
         $stmt = $this->conn->prepare("UPDATE cars SET price = ?, description = ? WHERE car_id = ?");
-        $stmt->bind_param("ssi", $price, $description, $carId);
+        $stmt->bind_param('ssi', $price, $description, $car_id);
         return $stmt->execute();
     }
 
-    // Delete Car
-    public function deleteCar($carId)
+    public function deleteCar($car_id)
     {
         $stmt = $this->conn->prepare("DELETE FROM cars WHERE car_id = ?");
-        $stmt->bind_param("i", $carId);
+        $stmt->bind_param('i', $car_id);
         return $stmt->execute();
     }
 }

@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $selectedRole = $_POST['role'];
 
     // SQL query to fetch user details based on username or email and role
-    $sql = "SELECT id, username, password, role_id, status FROM users WHERE (username = ? OR email = ?) AND status = 'Active'";
+    $sql = "SELECT id, username, email, password, role_id, status FROM users WHERE (username = ? OR email = ?) AND status = 'Active'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $username, $username); // Bind username for both username and email
     $stmt->execute();
@@ -24,12 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (($selectedRole === 'User Admin' && $user['role_id'] == 1) ||
                 ($selectedRole === 'Seller' && $user['role_id'] == 3) ||
                 ($selectedRole === 'Buyer' && $user['role_id'] == 4) ||
-                ($selectedRole === 'Used Car Agent' && $user['role_id'] == 5)) {
-                
+                ($selectedRole === 'Used Car Agent' && $user['role_id'] == 5)
+            ) {
+
                 // Set session variables
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role_id'] = $user['role_id'];
+                $_SESSION['email'] = $user['email']; // Set the email in the session
 
                 // Redirect to the appropriate page
                 if ($user['role_id'] == 1) {
@@ -51,4 +53,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 $conn->close();
-?>

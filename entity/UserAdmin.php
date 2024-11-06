@@ -1,6 +1,7 @@
 <?php
 class UserAdmin
 {
+    private $mysqli;
     private $conn;
 
     // Constructor to handle database connection internally
@@ -18,15 +19,26 @@ class UserAdmin
         }
         return $conn;
     }
-    
+
 
     // Function to create a user
     public function createUser($username, $email, $password, $role_id)
     {
-        $query = "INSERT INTO users (username, email, password, role_id) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare("INSERT INTO users (username, email, password, role_id) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param('sssi', $username, $email, $password, $role_id);
+
+        return $stmt->execute(); // Execute the query
+    }
+
+    // Helper function to get role name by ID
+    public function getRoleNameById($roleId)
+    {
+        $query = "SELECT role_name FROM roles WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssi", $username, $email, $password, $role_id); // role_id as an integer
-        return $stmt->execute();
+        $stmt->bind_param("i", $roleId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['role_name'] ?? null;
     }
 
     // Function to get a user by email
@@ -43,9 +55,9 @@ class UserAdmin
     public function getUserAccounts($usernameFilter = null, $roleFilter = null)
     {
         $query = "SELECT users.username, users.email, roles.role_name AS role, users.status 
-                  FROM users 
-                  LEFT JOIN roles ON users.role_id = roles.id
-                  WHERE 1=1";
+                 FROM users 
+                 LEFT JOIN roles ON users.role_id = roles.id
+                 WHERE 1=1";
         $params = [];
         $types = '';
 

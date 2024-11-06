@@ -71,7 +71,7 @@ function displayLoginPage($roles)
         <h2>Login to an account</h2>
 
         <form action="../controller/LoginController.php" method="POST" class="loginform">
-            <label for="username">Username or Email:</label>
+            <label for="username">Email:</label>
             <input type="text" id="username" name="username" required>
 
             <label for="password">Password:</label>

@@ -1,21 +1,23 @@
 <?php
-include_once '../controller/CarController.php';
+include '../controller/CarController.php';
 
 $message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $controller = new CarController();
 
-    // Get form data
+    // Get form data (removed transmission)
     $make = $_POST['make'];
     $model = $_POST['model'];
     $year = $_POST['year'];
     $color = $_POST['color'];
     $price = $_POST['price'];
-    $transmission = $_POST['transmission'];
     $description = $_POST['description'];
 
+    // Ensure 'created_by' is passed from session
+    $created_by = $_SESSION['email']; // Assuming the email is stored in session
+
     // Add car using the controller
-    if ($controller->addCar($make, $model, $year, $color, $price, $transmission, $description)) {
+    if ($controller->addCar($make, $model, $year, $color, $price, $description, $created_by)) {
         $message = "Car added successfully!";
     } else {
         $message = "Failed to add car.";
@@ -52,24 +54,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         select,
         textarea {
             width: 100%;
-            /* Set all fields to take full width of the form */
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
             box-sizing: border-box;
-            /* Include padding and border in width calculation */
         }
 
         textarea {
             height: 100px;
-            /* Set a specific height for the textarea */
         }
 
         button {
             width: 100%;
-            /* Keep buttons the same width */
             padding: 10px;
             background-color: #4CAF50;
             border: none;
@@ -92,7 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            /* Ensure items fill the available width */
         }
     </style>
 </head>
@@ -122,12 +119,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <label for="price">Price:</label>
         <input type="number" id="price" name="price" step="0.01" required>
-
-        <label for="transmission">Transmission:</label>
-        <select id="transmission" name="transmission">
-            <option value="Manual">Manual</option>
-            <option value="Automatic">Automatic</option>
-        </select>
 
         <label for="description">Description:</label>
         <textarea id="description" name="description"></textarea>

@@ -11,7 +11,7 @@
             const message = urlParams.get('message');
             if (message) {
                 alert(message);
-                window.location.href = '../boundary/carListings.php'; 
+                window.location.href = '../boundary/carListings.php';
             }
         };
     </script>
@@ -37,18 +37,16 @@
     <?php
     include '../controller/CarController.php';
 
+    session_start();
+    $created_by = $_SESSION['email']; // Use email as created_by
     $carController = new CarController();
+
     $filters = [];
-    if (isset($_GET['make']) && !empty($_GET['make'])) {
-        $filters['make'] = $_GET['make'];
-    }
-    if (isset($_GET['model']) && !empty($_GET['model'])) {
-        $filters['model'] = $_GET['model'];
-    }
-    if (isset($_GET['year']) && !empty($_GET['year'])) {
-        $filters['year'] = $_GET['year'];
-    }
-    $cars = $carController->getCarListings($filters);
+    if (isset($_GET['make'])) $filters['make'] = $_GET['make'];
+    if (isset($_GET['model'])) $filters['model'] = $_GET['model'];
+    if (isset($_GET['year'])) $filters['year'] = $_GET['year'];
+
+    $cars = $carController->getCarListings($created_by, $filters);
     ?>
 
     <form action="../controller/CarController.php" method="POST">
@@ -61,7 +59,6 @@
                         <th>Year</th>
                         <th>Color</th>
                         <th>Price</th>
-                        <th>Transmission</th>
                         <th>Description</th>
                         <th>Delete Car Listing</th>
                     </tr>
@@ -74,33 +71,25 @@
                             <td><?php echo htmlspecialchars($car['year']); ?></td>
                             <td><?php echo htmlspecialchars($car['color']); ?></td>
                             <td>
-                                <input type="number" name="price[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['price']); ?>" required>
+                                <input type="number" name="price[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['price']); ?>">
                             </td>
                             <td>
-                                <select name="transmission[]" disabled>
-                                    <option value="Automatic" <?php echo htmlspecialchars($car['transmission']) == 'Automatic' ? 'selected' : ''; ?>>Automatic</option>
-                                    <option value="Manual" <?php echo htmlspecialchars($car['transmission']) == 'Manual' ? 'selected' : ''; ?>>Manual</option>
-                                </select>
+                                <input type="text" name="description[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['description']); ?>">
                             </td>
                             <td>
-                                <input type="text" name="description[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['description']); ?>" required>
-                            </td>
-                            <td>
-                                <form action="../controller/CarController.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="car_id" value="<?php echo htmlspecialchars($car['car_id']); ?>">
-                                    <button type="submit" name="delete" class="delete-button">Delete</button>
-                                </form>
+                                <!-- Change from submitting 'delete' as the button value to passing 'car_id' -->
+                                <button type="submit" class="delete-button" name="delete" value="<?php echo $car['car_id']; ?>">Delete</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <input type="hidden" name="update" value="1">
-            <button type="submit" class="updateCarList">Update</button>
+            <button type="submit" class="updateCarList" name="update">Update</button>
         <?php else: ?>
-            <p style="color: white;">No car listings found.</p>
+            <h2>No cars found.</h2>
         <?php endif; ?>
     </form>
+
 </body>
 
 </html>

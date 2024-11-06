@@ -10,14 +10,14 @@ class CarController
         $this->car = new Car();
     }
 
-    public function getCarListings($filters = [])
+    public function getCarListings($created_by, $filters = [])
     {
-        return $this->car->getAllCars($filters);
+        return $this->car->getAllCars($created_by, $filters);
     }
 
-    public function addCar($make, $model, $year, $color, $price, $transmission, $description)
+    public function addCar($make, $model, $year, $color, $price, $description, $created_by)
     {
-        return $this->car->addCar($make, $model, $year, $color, $price, $transmission, $description);
+        return $this->car->addCar($make, $model, $year, $color, $price, $description, $created_by);
     }
 
     public function updateCarListings($prices, $descriptions)
@@ -28,32 +28,47 @@ class CarController
         }
     }
 
-    public function deleteCar($carId)
+    public function deleteCar($car_id)
     {
-        return $this->car->deleteCar($carId);
+        return $this->car->deleteCar($car_id);
     }
 }
 
-// Handle POST requests from carListings.php
+// Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $carController = new CarController(); // Instantiate the controller here
+    session_start();
+    $carController = new CarController();
+    $created_by = $_SESSION['email']; // Assuming 'email' is stored in session
+
+    if (isset($_POST['add'])) {
+        $make = $_POST['make'];
+        $model = $_POST['model'];
+        $year = $_POST['year'];
+        $color = $_POST['color'];
+        $price = $_POST['price'];
+        $description = $_POST['description'];
+
+        // Add car using the controller and session email as created_by
+        if ($carController->addCar($make, $model, $year, $color, $price, $description, $created_by)) {
+            header("Location: ../boundary/carListings.php?message=Car added successfully");
+        } else {
+            header("Location: ../boundary/addCarListings.php?message=Failed to add car");
+        }
+        exit;
+    }
 
     if (isset($_POST['update'])) {
         $prices = $_POST['price'];
         $descriptions = $_POST['description'];
         $carController->updateCarListings($prices, $descriptions);
-
-        // Redirect back to the car listings with a success message
         header("Location: ../boundary/carListings.php?message=Car listings updated successfully");
         exit;
     }
 
     // Check if a delete request has been made
-    if (isset($_POST['delete']) && isset($_POST['car_id'])) {
-        $carId = $_POST['car_id'];
-        $carController->deleteCar($carId); // Now this will work
-
-        // Redirect back to the car listings with a success message
+    if (isset($_POST['delete']) && isset($_POST['delete'])) {
+        $carId = $_POST['delete'];  // 'delete' now contains the car_id
+        $carController->deleteCar($carId); // Calls the deleteCar method
         header("Location: ../boundary/carListings.php?message=Car listing deleted successfully");
         exit;
     }
