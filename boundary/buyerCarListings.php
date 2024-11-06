@@ -34,51 +34,49 @@
     <h2>Car Listings</h2>
 
     <?php
-    include '../controller/CarController.php';
+    // Correct controller inclusion
+    include '../controller/BuyerCarController.php';
 
-    session_start();
-
-    // Buyer does not need to filter by created_by
-    $carController = new CarController();
+    // Instantiate the controller to fetch car listings
+    $buyerCarController = new BuyerCarController();
 
     $filters = [];
     if (isset($_GET['make'])) $filters['make'] = $_GET['make'];
     if (isset($_GET['model'])) $filters['model'] = $_GET['model'];
     if (isset($_GET['year'])) $filters['year'] = $_GET['year'];
 
-    $cars = $carController->getCarListings(null, $filters);  // Null for 'created_by' to view all cars
+    // Fetch the car listings based on the provided filters
+    $cars = $buyerCarController->getAllCars($filters);
     ?>
 
-    <form action="../controller/CarController.php" method="POST">
-        <?php if (!empty($cars)): ?>
-            <table>
-                <thead>
+    <?php if (!empty($cars)): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>Color</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($cars as $car): ?>
                     <tr>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Year</th>
-                        <th>Color</th>
-                        <th>Price</th>
-                        <th>Description</th>
+                        <td><?php echo htmlspecialchars($car['make']); ?></td>
+                        <td><?php echo htmlspecialchars($car['model']); ?></td>
+                        <td><?php echo htmlspecialchars($car['year']); ?></td>
+                        <td><?php echo htmlspecialchars($car['color']); ?></td>
+                        <td><?php echo htmlspecialchars($car['price']); ?></td>
+                        <td><?php echo htmlspecialchars($car['description']); ?></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($cars as $car): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($car['make']); ?></td>
-                            <td><?php echo htmlspecialchars($car['model']); ?></td>
-                            <td><?php echo htmlspecialchars($car['year']); ?></td>
-                            <td><?php echo htmlspecialchars($car['color']); ?></td>
-                            <td><?php echo htmlspecialchars($car['price']); ?></td>
-                            <td><?php echo htmlspecialchars($car['description']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <h2>No cars found.</h2>
-        <?php endif; ?>
-    </form>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <h2>No cars found.</h2>
+    <?php endif; ?>
 
 </body>
 
