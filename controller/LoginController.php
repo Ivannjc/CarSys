@@ -33,12 +33,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['role_id'] = $user['role_id'];
                 $_SESSION['email'] = $user['email']; // Set the email in the session
 
-                // Redirect to the appropriate page
-                if ($user['role_id'] == 1) {
-                    header("Location: ../boundary/useradminPage.php");
-                } else {
-                    // alter the condition according to different user role/profile
-                    header("Location: ../boundary/carListings.php");
+                // Redirect to the appropriate page based on role_id
+                switch ($user['role_id']) {
+                    case 1: // User Admin
+                        header("Location: ../boundary/useradminPage.php");
+                        break;
+                    case 3:  // Seller 
+                        header("Location: ../boundary/carListings.php");
+                        break;
+                    case 4:  // Buyer
+                        header("Location: ../boundary/buyerCarListings.php");
+                        break;
+                    case 5:  // Used Car Agent
+                        header("Location: ../boundary/agentCarListings.php");
+                        break;
+                    default:
+                        // Default redirect for User Admin or any other roles
+                        header("Location: ../boundary/useradminPage.php");
+                        break;
                 }
                 exit();
             } else {
@@ -53,3 +65,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 $conn->close();
+?>
