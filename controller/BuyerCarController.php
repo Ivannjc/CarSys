@@ -15,6 +15,11 @@ class BuyerCarController
     {
         return $this->car->getAllCarsForBuyer(); // Now using the new method for buyers
     }
+
+    public function getSavedCars($user_id)
+    {
+        return $this->car->getSavedCarsByUser($user_id);
+    }
 }
 
 // Handle GET requests to display cars to the buyer
@@ -26,5 +31,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Fetch all cars for the buyer
     $cars = $buyerCarController->getAllCars();
-
 }

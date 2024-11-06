@@ -1,7 +1,7 @@
 <?php
 class Car
 {
-    private $conn;
+    public $conn;
 
     public function __construct()
     {
@@ -55,6 +55,7 @@ class Car
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+
     public function addCar($make, $model, $year, $color, $price, $description, $created_by)
     {
         // Prepare the SQL query with placeholders
@@ -85,24 +86,29 @@ class Car
     public function getAllCarsForBuyer($filters = [])
     {
         $query = "SELECT car_id, make, model, year, color, price, description FROM cars";
-
         $params = [];
         $types = '';
+        $whereClauses = [];
 
+        // Add filters dynamically
         if (!empty($filters['make'])) {
-            $query .= " WHERE make LIKE ?";
+            $whereClauses[] = "make LIKE ?";
             $params[] = '%' . $filters['make'] . '%';
             $types .= 's';
         }
         if (!empty($filters['model'])) {
-            $query .= " AND model LIKE ?";
+            $whereClauses[] = "model LIKE ?";
             $params[] = '%' . $filters['model'] . '%';
             $types .= 's';
         }
         if (!empty($filters['year'])) {
-            $query .= " AND year = ?";
+            $whereClauses[] = "year = ?";
             $params[] = $filters['year'];
             $types .= 'i';
+        }
+
+        if ($whereClauses) {
+            $query .= " WHERE " . implode(" AND ", $whereClauses);
         }
 
         $stmt = $this->conn->prepare($query);
@@ -112,6 +118,28 @@ class Car
         $stmt->execute();
         $result = $stmt->get_result();
 
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // Save car
+    public function saveCar($car_id, $user_id)
+    {
+        $stmt = $this->conn->prepare("INSERT INTO saved_cars (car_id, user_id) VALUES (?, ?)");
+        $stmt->bind_param('ii', $car_id, $user_id);
+        return $stmt->execute();
+    }
+
+    public function getSavedCarsByUser($user_id)
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT cars.car_id, cars.make, cars.model, cars.year, cars.color, cars.price, cars.description 
+         FROM saved_cars 
+         JOIN cars ON saved_cars.car_id = cars.car_id 
+         WHERE saved_cars.user_id = ?"
+        );
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
