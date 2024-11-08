@@ -32,6 +32,11 @@ class CarController
     {
         return $this->car->deleteCar($car_id);
     }
+
+    public function incrementViewCount($car_id)
+    {
+        return $this->car->incrementViewCount($car_id);
+    }
 }
 
 // Handle POST requests
@@ -70,6 +75,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $carId = $_POST['delete'];  // 'delete' now contains the car_id
         $carController->deleteCar($carId); // Calls the deleteCar method
         header("Location: ../boundary/carListings.php?message=Car listing deleted successfully");
+        exit;
+    }
+
+    // Check if a view_description request has been made
+    if (isset($_POST['view_description'])) {
+        $car_id = $_POST['car_id']; // Get the car_id from the request
+
+        // Create an instance of the Car class
+        $carModel = new Car();
+
+        // Increment view count for the car
+        $carModel->incrementViewCount($car_id);
+
+        // Get the car's description
+        $description = $carModel->getCarDescription($car_id);
+
+        // Return the description in JSON format
+        echo json_encode(['description' => $description]);
         exit;
     }
 }

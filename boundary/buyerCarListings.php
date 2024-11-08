@@ -35,6 +35,36 @@ $cars = $buyerCarController->getAllCars($filters);
                 alert(message);
             }
         };
+
+        function viewDescription(car_id) {
+            const descriptionDiv = document.getElementById(`description_${car_id}`);
+            const viewCountElem = document.getElementById(`view_count_${car_id}`);
+
+            // Toggle visibility of the description
+            if (descriptionDiv.style.display === "none" || descriptionDiv.style.display === "") {
+                // Show description
+                fetch('../controller/CarController.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `view_description=1&car_id=${car_id}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        descriptionDiv.innerHTML = `<p>${data.description}</p>`;
+                        descriptionDiv.style.display = "block";
+
+                        // Update the view count displayed
+                        const currentCount = parseInt(viewCountElem.textContent.split(": ")[1]) + 1;
+                        viewCountElem.textContent = `Views: ${currentCount}`;
+                    })
+                    .catch(error => console.error('Error fetching description:', error));
+            } else {
+                // Hide description
+                descriptionDiv.style.display = "none";
+            }
+        }
     </script>
 </head>
 
@@ -76,14 +106,21 @@ $cars = $buyerCarController->getAllCars($filters);
                         <td><?php echo htmlspecialchars($car['year']); ?></td>
                         <td><?php echo htmlspecialchars($car['color']); ?></td>
                         <td><?php echo htmlspecialchars($car['price']); ?></td>
-                        <td><?php echo htmlspecialchars($car['description']); ?></td>
+                        <td>
+                            <!-- Description field now inside the table -->
+                            <button type="button" onclick="viewDescription(<?php echo $car['car_id']; ?>)">View Description</button>
+                            <div id="description_<?php echo $car['car_id']; ?>" style="display: none;">
+                                <p><?php echo htmlspecialchars($car['description']); ?></p>
+                            </div>
+                            <p id="view_count_<?php echo $car['car_id']; ?>">Views: <?php echo htmlspecialchars($car['view_count']); ?></p>
+                        </td>
+
                         <td>
                             <form action="../controller/SaveCarController.php" method="POST">
                                 <input type="hidden" name="car_id" value="<?php echo $car['car_id']; ?>">
                                 <button type="submit">Save</button>
                             </form>
                         </td>
-
                     </tr>
                 <?php endforeach; ?>
             </tbody>

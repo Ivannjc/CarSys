@@ -24,9 +24,10 @@ class Car
         return $conn;
     }
 
+    // Get all cars created by a specific user
     public function getAllCars($created_by, $filters = [])
     {
-        $query = "SELECT car_id, make, model, year, color, price, description FROM cars WHERE created_by = ?";
+        $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars WHERE created_by = ?";
 
         $params = [$created_by];
         $types = 's';
@@ -55,11 +56,11 @@ class Car
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-
+    // Add a new car to the database
     public function addCar($make, $model, $year, $color, $price, $description, $created_by)
     {
         // Prepare the SQL query with placeholders
-        $stmt = $this->conn->prepare("INSERT INTO cars (make, model, year, color, price, description, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO cars (make, model, year, color, price, description, created_by, view_count) VALUES (?, ?, ?, ?, ?, ?, ?, 0)");
 
         $stmt->bind_param('ssisdss', $make, $model, $year, $color, $price, $description, $created_by);
 
@@ -67,7 +68,7 @@ class Car
         return $stmt->execute();
     }
 
-
+    // Update car details
     public function updateCar($car_id, $price, $description)
     {
         $stmt = $this->conn->prepare("UPDATE cars SET price = ?, description = ? WHERE car_id = ?");
@@ -75,6 +76,7 @@ class Car
         return $stmt->execute();
     }
 
+    // Delete a car from the database
     public function deleteCar($car_id)
     {
         $stmt = $this->conn->prepare("DELETE FROM cars WHERE car_id = ?");
@@ -82,46 +84,45 @@ class Car
         return $stmt->execute();
     }
 
-    // Method for fetching all cars (for buyers, without the created_by filter)
-     // Methods to retrieve all cars for buyers with filters
-     public function getAllCarsForBuyer($filters = [])
-     {
-         $query = "SELECT car_id, make, model, year, color, price, description FROM cars";
-         $params = [];
-         $types = '';
-         $whereClauses = [];
- 
-         if (!empty($filters['make'])) {
-             $whereClauses[] = "make LIKE ?";
-             $params[] = '%' . $filters['make'] . '%';
-             $types .= 's';
-         }
-         if (!empty($filters['model'])) {
-             $whereClauses[] = "model LIKE ?";
-             $params[] = '%' . $filters['model'] . '%';
-             $types .= 's';
-         }
-         if (!empty($filters['year'])) {
-             $whereClauses[] = "year = ?";
-             $params[] = $filters['year'];
-             $types .= 'i';
-         }
- 
-         if ($whereClauses) {
-             $query .= " WHERE " . implode(" AND ", $whereClauses);
-         }
- 
-         $stmt = $this->conn->prepare($query);
-         if ($params) {
-             $stmt->bind_param($types, ...$params);
-         }
-         $stmt->execute();
-         $result = $stmt->get_result();
- 
-         return $result->fetch_all(MYSQLI_ASSOC);
-     }
+    // Fetch all cars for buyers with optional filters
+    public function getAllCarsForBuyer($filters = [])
+    {
+        $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars";
+        $params = [];
+        $types = '';
+        $whereClauses = [];
 
-    // Save car
+        if (!empty($filters['make'])) {
+            $whereClauses[] = "make LIKE ?";
+            $params[] = '%' . $filters['make'] . '%';
+            $types .= 's';
+        }
+        if (!empty($filters['model'])) {
+            $whereClauses[] = "model LIKE ?";
+            $params[] = '%' . $filters['model'] . '%';
+            $types .= 's';
+        }
+        if (!empty($filters['year'])) {
+            $whereClauses[] = "year = ?";
+            $params[] = $filters['year'];
+            $types .= 'i';
+        }
+
+        if ($whereClauses) {
+            $query .= " WHERE " . implode(" AND ", $whereClauses);
+        }
+
+        $stmt = $this->conn->prepare($query);
+        if ($params) {
+            $stmt->bind_param($types, ...$params);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // Save a car to a user's saved cars list
     public function saveCar($car_id, $user_id)
     {
         $stmt = $this->conn->prepare("INSERT INTO saved_cars (car_id, user_id) VALUES (?, ?)");
@@ -129,6 +130,7 @@ class Car
         return $stmt->execute();
     }
 
+    // Remove a car from a user's saved cars list
     public function unsaveCar($car_id, $user_id)
     {
         $stmt = $this->conn->prepare("DELETE FROM saved_cars WHERE car_id = ? AND user_id = ?");
@@ -136,6 +138,7 @@ class Car
         return $stmt->execute();
     }
 
+    // Get all saved cars for a user
     public function getSavedCarsByUser($user_id)
     {
         $stmt = $this->conn->prepare(
@@ -149,4 +152,24 @@ class Car
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    // Increment the view count of a specific car
+    public function incrementViewCount($car_id)
+    {
+        $stmt = $this->conn->prepare("UPDATE cars SET view_count = view_count + 1 WHERE car_id = ?");
+        $stmt->bind_param('i', $car_id);
+        return $stmt->execute();
+    }
+
+    // Fetch the description of a specific car
+    public function getCarDescription($car_id)
+    {
+        $stmt = $this->conn->prepare("SELECT description FROM cars WHERE car_id = ?");
+        $stmt->bind_param('i', $car_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['description'] ?? '';
+    }
 }
+?>
