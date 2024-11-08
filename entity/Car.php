@@ -171,5 +171,71 @@ class Car
         $row = $result->fetch_assoc();
         return $row['description'] ?? '';
     }
+
+    public function getAllCarsAgent($created_by, $filters = [], $role_id)
+    {
+        // Base query
+        $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars";
+        $params = [];
+        $types = '';
+        $whereAdded = false;  // Track if WHERE has been added
+
+        // If role_id is not 5, add the created_by filter
+        if ($role_id != 5) {
+            $query .= " WHERE created_by = ?";
+            $params[] = $created_by;
+            $types .= 's';
+            $whereAdded = true;
+        }
+
+        // Add filters to the query if provided
+        if (!empty($filters['make'])) {
+            // Use WHERE if none has been added, else use AND
+            if ($whereAdded) {
+                $query .= " AND";
+            } else {
+                $query .= " WHERE";
+                $whereAdded = true;
+            }
+            $query .= " make LIKE ?";
+            $params[] = '%' . $filters['make'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['model'])) {
+            // Use AND if WHERE has been added already
+            if ($whereAdded) {
+                $query .= " AND";
+            } else {
+                $query .= " WHERE";
+                $whereAdded = true;
+            }
+            $query .= " model LIKE ?";
+            $params[] = '%' . $filters['model'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['year'])) {
+            // Use AND for year filter
+            if ($whereAdded) {
+                $query .= " AND";
+            } else {
+                $query .= " WHERE";
+                $whereAdded = true;
+            }
+            $query .= " year = ?";
+            $params[] = $filters['year'];
+            $types .= 'i';
+        }
+
+        // Prepare and execute the query
+        $stmt = $this->conn->prepare($query);
+        if ($params) {
+            $stmt->bind_param($types, ...$params);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
-?>

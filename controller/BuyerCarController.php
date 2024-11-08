@@ -24,7 +24,6 @@ class BuyerCarController
 
 // Handle GET requests to display cars to the buyer
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    session_start();
 
     // Instantiate the controller
     $buyerCarController = new BuyerCarController();
