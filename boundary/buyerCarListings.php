@@ -113,7 +113,7 @@ $cars = $buyerCarController->getAllCars($filters);
                             <div id="description_<?php echo $car['car_id']; ?>" style="display: none;">
                                 <p><?php echo htmlspecialchars($car['description']); ?></p>
                             </div>
-                            <p id="view_count_<?php echo $car['car_id']; ?>">Views: <?php echo htmlspecialchars($car['view_count']); ?></p>
+                            <!-- <p id="view_count_<?php echo $car['car_id']; ?>">Views: <?php echo htmlspecialchars($car['view_count']); ?></p> -->
                         </td>
 
                         <td>

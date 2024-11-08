@@ -89,6 +89,14 @@ include '../controller/LoanCalcController.php';
 </head>
 
 <body>
+    <div class="navbar">
+        <a href="buyerCarListings.php">View Car Listings</a>
+        <a href="savedCars.php">View Saved Cars</a>
+        <a href="loanCalculator.php">Loan Calculator</a>
+        <form action="../controller/logoutController.php" method="POST" style="display:inline;">
+            <button class="logout-button" type="submit">Logout</button>
+        </form>
+    </div>
     <div class="loan-calculator-container">
         <h2>Car Loan Calculator</h2>
 
