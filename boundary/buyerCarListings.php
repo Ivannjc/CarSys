@@ -65,6 +65,18 @@ $cars = $buyerCarController->getAllCars($filters);
                 descriptionDiv.style.display = "none";
             }
         }
+
+        // JavaScript for displaying popup form and submitting review
+        function openReviewForm(car_id) {
+            document.getElementById("reviewForm").style.display = "block";
+            document.getElementById("car_id").value = car_id;
+        }
+
+        function closeReviewForm() {
+            document.getElementById("reviewForm").style.display = "none";
+        }
+
+        
     </script>
 </head>
 
@@ -96,7 +108,8 @@ $cars = $buyerCarController->getAllCars($filters);
                     <th>Color</th>
                     <th>Price</th>
                     <th>Description</th>
-                    <th>Action</th>
+                    <th>Save Car</th>
+                    <th>Review Car</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,7 +121,6 @@ $cars = $buyerCarController->getAllCars($filters);
                         <td><?php echo htmlspecialchars($car['color']); ?></td>
                         <td><?php echo htmlspecialchars($car['price']); ?></td>
                         <td>
-                            <!-- Description field now inside the table -->
                             <button type="button" onclick="viewDescription(<?php echo $car['car_id']; ?>)">View Description</button>
                             <div id="description_<?php echo $car['car_id']; ?>" style="display: none;">
                                 <p><?php echo htmlspecialchars($car['description']); ?></p>
@@ -122,6 +134,9 @@ $cars = $buyerCarController->getAllCars($filters);
                                 <button type="submit">Save</button>
                             </form>
                         </td>
+                        <td>
+                            <button onclick="openReviewForm(<?php echo $car['car_id']; ?>)">Review</button>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -129,6 +144,56 @@ $cars = $buyerCarController->getAllCars($filters);
     <?php else: ?>
         <h2>No cars found.</h2>
     <?php endif; ?>
+
+    <!-- Review Form Popup -->
+    <div id="reviewForm" style="display: none;">
+        <form id="reviewFormElement" onsubmit="submitReview(event)">
+            <h2>Write a Review</h2>
+            <input type="hidden" name="car_id" id="car_id">
+            <textarea name="review_text" placeholder="Write your review here..." required></textarea>
+            <button type="submit">Submit</button>
+            <button type="button" onclick="closeReviewForm()">Cancel</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript to open the review form
+        function openReviewForm(car_id) {
+            document.getElementById("reviewForm").style.display = "block";
+            document.getElementById("car_id").value = car_id;
+        }
+
+        // JavaScript to close the review form
+        function closeReviewForm() {
+            document.getElementById("reviewForm").style.display = "none";
+        }
+
+        // JavaScript to submit the review form data to the controller
+        function submitReview(event) {
+            event.preventDefault(); // Prevent form from submitting traditionally
+
+            const form = document.getElementById('reviewFormElement');
+            const formData = new FormData(form); // Collects form data including car_id and review_text
+
+            // Send review data to ReviewController.php using fetch
+            fetch('../controller/ReviewController.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Review submitted successfully!");
+                    } else {
+                        alert(data.message || "Failed to submit review.");
+                    }
+                    closeReviewForm(); // Close the form after submission
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+
 </body>
 
 </html>
