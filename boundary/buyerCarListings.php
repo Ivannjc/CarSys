@@ -1,3 +1,25 @@
+<?php
+session_start();
+include '../controller/BuyerCarController.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: loginPage.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+$buyerCarController = new BuyerCarController();
+
+// Collect filters if they are set
+$filters = [];
+if (isset($_GET['make'])) $filters['make'] = $_GET['make'];
+if (isset($_GET['model'])) $filters['model'] = $_GET['model'];
+if (isset($_GET['year'])) $filters['year'] = $_GET['year'];
+
+// Fetch the car listings based on the provided filters
+$cars = $buyerCarController->getAllCars($filters);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +33,6 @@
             const message = urlParams.get('message');
             if (message) {
                 alert(message);
-                window.location.href = '../boundary/buyerCarListings.php';
             }
         };
     </script>
@@ -34,36 +55,6 @@
 
     <h2>Car Listings</h2>
 
-    <?php
-    // Correct controller inclusion
-    include '../controller/BuyerCarController.php';
-
-
-    $user_id = $_SESSION['user_id'];
-
-    // Instantiate the controller to fetch car listings
-    $buyerCarController = new BuyerCarController();
-
-    // Collect filters if they are set
-    $filters = [];
-    if (isset($_GET['make'])) $filters['make'] = $_GET['make'];
-    if (isset($_GET['model'])) $filters['model'] = $_GET['model'];
-    if (isset($_GET['year'])) $filters['year'] = $_GET['year'];
-
-    // Fetch the car listings based on the provided filters
-    $cars = $buyerCarController->getAllCars($filters);
-
-    // Fetch the saved cars for the current user
-    $savedCars = array_column($buyerCarController->getSavedCars($user_id), 'car_id');
-    ?>
-
-    <?php
-    // Fetch the saved cars for the current user
-    $user_id = $_SESSION['user_id'];
-    $savedCars = array_column($buyerCarController->getSavedCars($user_id), 'car_id');
-
-    ?>
-
     <?php if (!empty($cars)): ?>
         <table>
             <thead>
@@ -74,7 +65,7 @@
                     <th>Color</th>
                     <th>Price</th>
                     <th>Description</th>
-                    <th>Add to Saved</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,15 +78,12 @@
                         <td><?php echo htmlspecialchars($car['price']); ?></td>
                         <td><?php echo htmlspecialchars($car['description']); ?></td>
                         <td>
-                            <?php if (in_array($car['car_id'], $savedCars)): ?>
-                                <button type="button" disabled>Saved</button>
-                            <?php else: ?>
-                                <form action="../controller/SaveCarController.php" method="POST">
-                                    <input type="hidden" name="car_id" value="<?php echo $car['car_id']; ?>">
-                                    <button type="submit">Save</button>
-                                </form>
-                            <?php endif; ?>
+                            <form action="../controller/SaveCarController.php" method="POST">
+                                <input type="hidden" name="car_id" value="<?php echo $car['car_id']; ?>">
+                                <button type="submit">Save</button>
+                            </form>
                         </td>
+
                     </tr>
                 <?php endforeach; ?>
             </tbody>

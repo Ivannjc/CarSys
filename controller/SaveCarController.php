@@ -1,6 +1,6 @@
 <?php
-include '../entity/Car.php';
 session_start();
+include '../entity/Car.php';
 
 class SaveCarController
 {
@@ -13,7 +13,6 @@ class SaveCarController
 
     public function saveCar($car_id, $user_id)
     {
-        // Check if the car is already saved by this user
         $stmt = $this->car->conn->prepare("SELECT COUNT(*) FROM saved_cars WHERE car_id = ? AND user_id = ?");
         $stmt->bind_param('ii', $car_id, $user_id);
         $stmt->execute();
@@ -21,12 +20,10 @@ class SaveCarController
         $stmt->fetch();
         $stmt->close();
 
-        // If the car is already saved, do not insert again
         if ($count > 0) {
             return false;
         }
 
-        // Save car if not already saved
         return $this->car->saveCar($car_id, $user_id);
     }
 
@@ -34,21 +31,37 @@ class SaveCarController
     {
         return $this->car->getSavedCarsByUser($user_id);
     }
+
+    public function unsaveCar($user_id, $car_id)
+    {
+        return $this->car->unsaveCar($car_id, $user_id);
+    }
 }
 
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'])) {
+    session_start();
     if (!isset($_SESSION['user_id'])) {
         header("Location: ../boundary/loginPage.php");
         exit;
     }
+
     $user_id = $_SESSION['user_id'];
     $car_id = $_POST['car_id'];
+    $action = $_POST['action'] ?? 'save'; // Default to 'save' if 'action' is not set
 
     $controller = new SaveCarController();
-    $result = $controller->saveCar($car_id, $user_id);
+    
+    if ($action === 'unsave') {
+        // Unsave car
+        $result = $controller->unsaveCar($user_id, $car_id);
+        $message = $result ? "Car unsaved successfully!" : "Failed to unsave car.";
+    } else {
+        // Save car
+        $result = $controller->saveCar($car_id, $user_id);
+        $message = $result ? "Car saved successfully!" : "Car already saved.";
+    }
 
-    $message = $result ? "Car saved successfully!" : "Failed to save the car.";
-    header("Location: ../boundary/buyerCarListings.php?message=" . urlencode($message));
+    header("Location: ../boundary/savedCars.php?message=" . urlencode($message));
     exit;
 }
-?>

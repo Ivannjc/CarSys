@@ -83,48 +83,55 @@ class Car
     }
 
     // Method for fetching all cars (for buyers, without the created_by filter)
-    public function getAllCarsForBuyer($filters = [])
-    {
-        $query = "SELECT car_id, make, model, year, color, price, description FROM cars";
-        $params = [];
-        $types = '';
-        $whereClauses = [];
-
-        // Add filters dynamically
-        if (!empty($filters['make'])) {
-            $whereClauses[] = "make LIKE ?";
-            $params[] = '%' . $filters['make'] . '%';
-            $types .= 's';
-        }
-        if (!empty($filters['model'])) {
-            $whereClauses[] = "model LIKE ?";
-            $params[] = '%' . $filters['model'] . '%';
-            $types .= 's';
-        }
-        if (!empty($filters['year'])) {
-            $whereClauses[] = "year = ?";
-            $params[] = $filters['year'];
-            $types .= 'i';
-        }
-
-        if ($whereClauses) {
-            $query .= " WHERE " . implode(" AND ", $whereClauses);
-        }
-
-        $stmt = $this->conn->prepare($query);
-        if ($params) {
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
+     // Methods to retrieve all cars for buyers with filters
+     public function getAllCarsForBuyer($filters = [])
+     {
+         $query = "SELECT car_id, make, model, year, color, price, description FROM cars";
+         $params = [];
+         $types = '';
+         $whereClauses = [];
+ 
+         if (!empty($filters['make'])) {
+             $whereClauses[] = "make LIKE ?";
+             $params[] = '%' . $filters['make'] . '%';
+             $types .= 's';
+         }
+         if (!empty($filters['model'])) {
+             $whereClauses[] = "model LIKE ?";
+             $params[] = '%' . $filters['model'] . '%';
+             $types .= 's';
+         }
+         if (!empty($filters['year'])) {
+             $whereClauses[] = "year = ?";
+             $params[] = $filters['year'];
+             $types .= 'i';
+         }
+ 
+         if ($whereClauses) {
+             $query .= " WHERE " . implode(" AND ", $whereClauses);
+         }
+ 
+         $stmt = $this->conn->prepare($query);
+         if ($params) {
+             $stmt->bind_param($types, ...$params);
+         }
+         $stmt->execute();
+         $result = $stmt->get_result();
+ 
+         return $result->fetch_all(MYSQLI_ASSOC);
+     }
 
     // Save car
     public function saveCar($car_id, $user_id)
     {
         $stmt = $this->conn->prepare("INSERT INTO saved_cars (car_id, user_id) VALUES (?, ?)");
+        $stmt->bind_param('ii', $car_id, $user_id);
+        return $stmt->execute();
+    }
+
+    public function unsaveCar($car_id, $user_id)
+    {
+        $stmt = $this->conn->prepare("DELETE FROM saved_cars WHERE car_id = ? AND user_id = ?");
         $stmt->bind_param('ii', $car_id, $user_id);
         return $stmt->execute();
     }
