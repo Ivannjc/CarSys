@@ -18,9 +18,27 @@
 </head>
 
 <body>
+    <?php
+    session_start();
+    include '../controller/AgentCarController.php';
+
+    $created_by = $_SESSION['email'];
+    $role_id = $_SESSION['role_id']; // Assuming role_id is set in session
+
+    $agentCarController = new AgentCarController();
+
+    $filters = [];
+    if (!empty($_GET['make'])) $filters['make'] = $_GET['make'];
+    if (!empty($_GET['model'])) $filters['model'] = $_GET['model'];
+    if (!empty($_GET['year'])) $filters['year'] = $_GET['year'];
+
+    // Fetch cars based on role_id
+    $cars = $agentCarController->getCarListings($created_by, $filters, $role_id);
+    ?>
+
     <div class="navbar">
         <a href="agentCarListings.php">View Car Listings</a>
-        <a href="addCarListings.php">Create Car Listing</a>
+        <a href="agentAddCarListings.php">Create Car Listing</a>
         <form action="agentCarListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
             <input type="text" name="model" placeholder="Search by Model" value="<?php echo isset($_GET['model']) ? htmlspecialchars($_GET['model']) : ''; ?>">
@@ -33,25 +51,6 @@
     </div>
 
     <h2>Car Listings</h2>
-
-    <?php
-    include '../controller/AgentCarController.php';
-
-    session_start();
-    $created_by = $_SESSION['email'];
-    $role_id = $_SESSION['role_id']; // Assuming role_id is set in session
-
-    $agentCarController = new AgentCarController();
-
-    $filters = [];
-    if (isset($_GET['make'])) $filters['make'] = $_GET['make'];
-    if (isset($_GET['model'])) $filters['model'] = $_GET['model'];
-    if (isset($_GET['year'])) $filters['year'] = $_GET['year'];
-
-    // Fetch cars based on role_id
-    $cars = $agentCarController->getCarListings($created_by, $filters, $role_id);
-    ?>
-
 
     <form action="../controller/AgentCarController.php" method="POST">
         <?php if (!empty($cars)): ?>
@@ -92,8 +91,6 @@
             <h2>No cars found.</h2>
         <?php endif; ?>
     </form>
-
-
 </body>
 
 </html>

@@ -44,7 +44,7 @@ class AgentCarController
 // Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start();
-    $carController = new CarController();
+    $carController = new AgentCarController();
     $created_by = $_SESSION['email']; // Assuming 'email' is stored in session
 
     if (isset($_POST['add'])) {
@@ -57,9 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Add car using the controller and session email as created_by
         if ($carController->addCar($make, $model, $year, $color, $price, $description, $created_by)) {
-            header("Location: ../boundary/carListings.php?message=Car added successfully");
+            header("Location: ../boundary/agentCarListings.php?message=Car added successfully");
         } else {
-            header("Location: ../boundary/addCarListings.php?message=Failed to add car");
+            header("Location: ../boundary/agentAddCarListings.php?message=Failed to add car");
         }
         exit;
     }
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $prices = $_POST['price'];
         $descriptions = $_POST['description'];
         $carController->updateCarListings($prices, $descriptions);
-        header("Location: ../boundary/carListings.php?message=Car listings updated successfully");
+        header("Location: ../boundary/agentCarListings.php?message=Car listings updated successfully");
         exit;
     }
 
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete']) && isset($_POST['delete'])) {
         $carId = $_POST['delete'];  // 'delete' now contains the car_id
         $carController->deleteCar($carId); // Calls the deleteCar method
-        header("Location: ../boundary/carListings.php?message=Car listing deleted successfully");
+        header("Location: ../boundary/agentCarListings.php?message=Car listing deleted successfully");
         exit;
     }
 
