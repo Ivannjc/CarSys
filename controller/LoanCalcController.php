@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = calculateCarLoan($loanAmount, $interestRate, $loanTerm);
 
     // Redirect back to loanCalculator.php with the results as query parameters
-    header("Location: loanCalculator.php?monthlyPayment=" . $result['monthlyPayment'] . "&totalAmount=" . $result['totalAmount'] . "&totalInterest=" . $result['totalInterest']);
+    header("Location: ../boundary/loanCalculator.php?monthlyPayment=" . $result['monthlyPayment'] . "&totalAmount=" . $result['totalAmount'] . "&totalInterest=" . $result['totalInterest']);
     exit();
 }
 
