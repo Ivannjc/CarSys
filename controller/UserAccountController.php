@@ -17,13 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $username = $_POST['update'];
     $originalUsername = $_POST['originalUsername'];
     $updatedUsername = $_POST['updatedUsername'];
-    $updatedEmail = $_POST['updatedEmail'];
 
     // Get the selected role ID for the user
     $newRoleId = $roles[$username];
 
     // Update user role, username, and email using the role ID
-    if ($userAdmin->updateUserAccountDetails($originalUsername, $updatedUsername, $updatedEmail, $newRoleId)) {
+    if ($userAdmin->updateUserAccountDetails($originalUsername, $updatedUsername, $newRoleId)) {
         header('Location: ../boundary/userAccounts.php?message=Profile updated successfully!');
         exit();
     } else {

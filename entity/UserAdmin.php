@@ -216,11 +216,11 @@ class UserAdmin
         return false;
     }
 
-    public function updateUserAccountDetails($username, $updatedUsername, $updatedEmail, $updatedRoleId)
+    public function updateUserAccountDetails($username, $updatedUsername, $updatedRoleId)
     {
-        $query = "UPDATE users SET username = ?, email = ?, role_id = ? WHERE username = ?";
+        $query = "UPDATE users SET username = ?, role_id = ? WHERE username = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssis", $updatedUsername, $updatedEmail, $updatedRoleId, $username);
+        $stmt->bind_param("sis", $updatedUsername, $updatedRoleId, $username);
         return $stmt->execute();
     }
 
