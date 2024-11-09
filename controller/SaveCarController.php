@@ -32,6 +32,24 @@ class SaveCarController
         return $this->car->getSavedCarsByUser($user_id);
     }
 
+    public function getAllSavedCars()  // Changed method name
+    {
+        // Query to fetch all saved cars, without user-specific filter
+        $query = "SELECT cars.*, saved_cars.user_id, users.username 
+                  FROM saved_cars 
+                  JOIN cars ON saved_cars.car_id = cars.car_id 
+                  JOIN users ON saved_cars.user_id = users.id";
+
+        $stmt = $this->car->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // Fetch all cars and return as an associative array
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+
+
     public function unsaveCar($user_id, $car_id)
     {
         return $this->car->unsaveCar($car_id, $user_id);
@@ -51,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'])) {
     $action = $_POST['action'] ?? 'save'; // Default to 'save' if 'action' is not set
 
     $controller = new SaveCarController();
-    
+
     if ($action === 'unsave') {
         // Unsave car
         $result = $controller->unsaveCar($user_id, $car_id);

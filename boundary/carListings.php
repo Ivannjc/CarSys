@@ -22,6 +22,8 @@
         <a href="carListings.php">View Car Listings</a>
         <a href="addCarListings.php">Create Car Listing</a>
         <a href="viewReviews.php">View Car Reviews</a>
+        <a href="sellerSavedCars.php">View Saved Cars</a>
+
 
         <form action="carListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
