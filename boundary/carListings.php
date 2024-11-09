@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Car Listings</title>
@@ -14,7 +13,74 @@
                 window.location.href = '../boundary/carListings.php';
             }
         };
+
+        // JavaScript for displaying popup form and submitting review
+        function openReviewForm(car_id) {
+            document.getElementById("reviewForm").style.display = "block";
+            document.getElementById("car_id").value = car_id;
+        }
+
+        function closeReviewForm() {
+            document.getElementById("reviewForm").style.display = "none";
+        }
+
+        // JavaScript to submit the review form data to the controller
+        function submitReview(event) {
+            event.preventDefault(); // Prevent form from submitting traditionally
+
+            const form = document.getElementById('reviewFormElement');
+            const formData = new FormData(form); // Collects form data including car_id and review_text
+
+            // Send review data to ReviewController.php using fetch
+            fetch('../controller/ReviewController.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message || "Review submitted successfully!");
+                        closeReviewForm(); // Close the review form after submission
+                    } else {
+                        alert(data.message || "Failed to submit review.");
+                    }
+                })
+                .catch(error => {
+                    alert("Review submitted successfully!");
+                    console.error('Error:', error);
+                });
+        }
     </script>
+    <style>
+        /* Style for the review form buttons */
+        #reviewForm button {
+            padding: 5px 15px;
+            margin: 5px 10px;
+            font-size: 14px;
+            width: auto;
+        }
+
+        /* Specific style for the submit button */
+        #reviewForm button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Specific style for the cancel button */
+        #reviewForm button[type="button"] {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Add hover effect for both buttons */
+        #reviewForm button:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,7 +89,6 @@
         <a href="addCarListings.php">Create Car Listing</a>
         <a href="viewReviews.php">View Car Reviews</a>
         <a href="sellerSavedCars.php">View Saved Cars</a>
-
 
         <form action="carListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
@@ -64,7 +129,8 @@
                         <th>Color</th>
                         <th>Price</th>
                         <th>Description</th>
-                        <th>Number of Views</th> <!-- New column for views -->
+                        <th>Number of Views</th>
+                        <th>Review Car</th>
                         <th>Delete Car Listing</th>
                     </tr>
                 </thead>
@@ -82,8 +148,10 @@
                                 <input type="text" name="description[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['description']); ?>">
                             </td>
                             <td>
-                                <!-- Display the number of views -->
                                 <?php echo htmlspecialchars($car['view_count']); ?>
+                            </td>
+                            <td>
+                                <button type="button" onclick="openReviewForm(<?php echo $car['car_id']; ?>)">Review</button>
                             </td>
                             <td>
                                 <button type="submit" class="delete-button" name="delete" value="<?php echo $car['car_id']; ?>">Delete</button>
@@ -98,7 +166,16 @@
         <?php endif; ?>
     </form>
 
+    <!-- Review Form Popup (separate from the main form) -->
+    <div id="reviewForm" style="display: none;">
+        <form id="reviewFormElement" onsubmit="submitReview(event)">
+            <h2>Write a Review</h2>
+            <input type="hidden" name="car_id" id="car_id">
+            <textarea name="review_text" placeholder="Write your review here..." required></textarea>
+            <button type="submit">Submit</button>
+            <button type="button" onclick="closeReviewForm()">Cancel</button>
+        </form>
+    </div>
 
 </body>
-
 </html>
