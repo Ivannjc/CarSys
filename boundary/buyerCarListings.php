@@ -90,6 +90,8 @@ $cars = $buyerCarController->getAllCars($filters);
         <a href="buyerCarListings.php">View Car Listings</a>
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>
+        <a href="buyerViewReviews.php">View Car Reviews</a>
+
         <form action="buyerCarListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
             <input type="text" name="model" placeholder="Search by Model" value="<?php echo isset($_GET['model']) ? htmlspecialchars($_GET['model']) : ''; ?>">

@@ -17,16 +17,17 @@ $reviews = $controller->getReviews();
 
 <body>
     <div class="navbar">
-        <a href="carListings.php">View Car Listings</a>
-        <a href="addCarListings.php">Create Car Listing</a>
-        <a href="viewReviews.php">View Car Reviews</a>
+        <a href="buyerCarListings.php">View Car Listings</a>
+        <a href="savedCars.php">View Saved Cars</a>
+        <a href="loanCalculator.php">Loan Calculator</a>
+        <a href="buyerViewReviews.php">View Car Reviews</a>
         <form action="../controller/logoutController.php" method="POST" style="display:inline;">
             <button class="logout-button" type="submit">Logout</button>
         </form>
     </div>
     <h2>Car Reviews</h2>
     <?php if (empty($reviews)) : ?>
-        <h2>No reviews found.</h2>
+        <p>No reviews found.</p>
     <?php else : ?>
         <table>
             <tr>
