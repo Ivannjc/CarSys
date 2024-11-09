@@ -39,6 +39,7 @@
     <div class="navbar">
         <a href="agentCarListings.php">View Car Listings</a>
         <a href="agentAddCarListings.php">Create Car Listing</a>
+        <a href="agentViewReviews.php">View Car Reviews</a>
         <form action="agentCarListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
             <input type="text" name="model" placeholder="Search by Model" value="<?php echo isset($_GET['model']) ? htmlspecialchars($_GET['model']) : ''; ?>">

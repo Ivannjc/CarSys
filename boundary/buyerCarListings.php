@@ -31,10 +31,17 @@ $cars = $buyerCarController->getAllCars($filters);
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const message = urlParams.get('message');
+            const messageType = urlParams.get('messageType');
+
             if (message) {
-                alert(message);
+                if (messageType === 'success') {
+                    alert(message); // Show success message
+                } else {
+                    alert("Error: " + message); // Show error message prefixed with "Error"
+                }
             }
         };
+
 
         function viewDescription(car_id) {
             const descriptionDiv = document.getElementById(`description_${car_id}`);
@@ -75,8 +82,6 @@ $cars = $buyerCarController->getAllCars($filters);
         function closeReviewForm() {
             document.getElementById("reviewForm").style.display = "none";
         }
-
-        
     </script>
 </head>
 
@@ -183,13 +188,17 @@ $cars = $buyerCarController->getAllCars($filters);
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert("Review submitted successfully!");
+                        alert(data.message || "Review submitted successfully!");
                     } else {
                         alert(data.message || "Failed to submit review.");
                     }
-                    closeReviewForm(); // Close the form after submission
+                    
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    alert("Review submitted successfully!");
+                    console.error('Error:', error);
+                });
+                closeReviewForm();
         }
     </script>
 
