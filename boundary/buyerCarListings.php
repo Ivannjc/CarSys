@@ -72,17 +72,46 @@ $cars = $buyerCarController->getAllCars($filters);
                 descriptionDiv.style.display = "none";
             }
         }
-
-        // JavaScript for displaying popup form and submitting review
-        function openReviewForm(car_id) {
-            document.getElementById("reviewForm").style.display = "block";
-            document.getElementById("car_id").value = car_id;
-        }
-
-        function closeReviewForm() {
-            document.getElementById("reviewForm").style.display = "none";
-        }
     </script>
+    <style>
+        /* Style the popup form */
+        #reviewForm {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        /* Style for overlay to dim the background */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Style the close button */
+        #reviewForm button[type="button"] {
+            margin-top: 10px;
+            background-color: #ff5c5c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 
 <body>
@@ -102,60 +131,62 @@ $cars = $buyerCarController->getAllCars($filters);
             <button class="logout-button" type="submit">Logout</button>
         </form>
     </div>
+    <div class="table-container">
 
-    <h2>Car Listings</h2>
+        <h2>Car Listings</h2>
 
-    <?php if (!empty($cars)): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Year</th>
-                    <th>Color</th>
-                    <th>Price</th>
-                    <th>Description</th>
-                    <th>Save Car</th>
-                    <th>Review Car</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($cars as $car): ?>
+        <?php if (!empty($cars)): ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($car['make']); ?></td>
-                        <td><?php echo htmlspecialchars($car['model']); ?></td>
-                        <td><?php echo htmlspecialchars($car['year']); ?></td>
-                        <td><?php echo htmlspecialchars($car['color']); ?></td>
-                        <td><?php echo htmlspecialchars($car['price']); ?></td>
-                        <td>
-                            <button type="button" onclick="viewDescription(<?php echo $car['car_id']; ?>)">View Description</button>
-                            <div id="description_<?php echo $car['car_id']; ?>" style="display: none;">
-                                <p><?php echo htmlspecialchars($car['description']); ?></p>
-                            </div>
-                            <!-- <p id="view_count_<?php echo $car['car_id']; ?>">Views: <?php echo htmlspecialchars($car['view_count']); ?></p> -->
-                        </td>
-
-                        <td>
-                            <form action="../controller/SaveCarController.php" method="POST">
-                                <input type="hidden" name="car_id" value="<?php echo $car['car_id']; ?>">
-                                <button type="submit">Save</button>
-                            </form>
-                        </td>
-                        <td>
-                            <button onclick="openReviewForm(<?php echo $car['car_id']; ?>)">Review</button>
-                        </td>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Save Car</th>
+                        <th>Review Car</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <h2>No cars found.</h2>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($cars as $car): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($car['make']); ?></td>
+                            <td><?php echo htmlspecialchars($car['model']); ?></td>
+                            <td><?php echo htmlspecialchars($car['year']); ?></td>
+                            <td><?php echo htmlspecialchars($car['color']); ?></td>
+                            <td><?php echo htmlspecialchars($car['price']); ?></td>
+                            <td>
+                                <button type="button" onclick="viewDescription(<?php echo $car['car_id']; ?>)">View Description</button>
+                                <div id="description_<?php echo $car['car_id']; ?>" style="display: none;">
+                                    <p><?php echo htmlspecialchars($car['description']); ?></p>
+                                </div>
+                                <!-- <p id="view_count_<?php echo $car['car_id']; ?>">Views: <?php echo htmlspecialchars($car['view_count']); ?></p> -->
+                            </td>
+
+                            <td>
+                                <form action="../controller/SaveCarController.php" method="POST">
+                                    <input type="hidden" name="car_id" value="<?php echo $car['car_id']; ?>">
+                                    <button type="submit">Save</button>
+                                </form>
+                            </td>
+                            <td>
+                                <button onclick="openReviewForm(<?php echo $car['car_id']; ?>)">Review</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <h2>No cars found.</h2>
+        <?php endif; ?>
+    </div>
 
     <!-- Review Form Popup -->
     <div id="reviewForm" style="display: none;">
         <form id="reviewFormElement" onsubmit="submitReview(event)">
-            <h2>Write a Review</h2>
+            <h3>Write a Review</h3>
             <input type="hidden" name="car_id" id="car_id">
             <textarea name="review_text" placeholder="Write your review here..." required></textarea>
             <button type="submit">Submit</button>
@@ -194,13 +225,13 @@ $cars = $buyerCarController->getAllCars($filters);
                     } else {
                         alert(data.message || "Failed to submit review.");
                     }
-                    
+
                 })
                 .catch(error => {
                     alert("Review submitted successfully!");
                     console.error('Error:', error);
                 });
-                closeReviewForm();
+            closeReviewForm();
         }
     </script>
 

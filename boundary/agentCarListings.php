@@ -15,6 +15,12 @@
             }
         };
     </script>
+    <style>
+        .table-container {
+            margin-top: 7700px;
+            /* Adjust this based on the height of your navbar */
+        }
+    </style>
 </head>
 
 <body>
@@ -33,7 +39,7 @@
     if (!empty($_GET['year'])) $filters['year'] = $_GET['year'];
 
     // Fetch cars based on role_id
-    $cars = $agentCarController->getCarListings($created_by, $filters, $role_id);
+    $cars = $agentCarController->getCarListings( $filters, $role_id);
     ?>
 
     <div class="navbar">
@@ -51,47 +57,50 @@
         </form>
     </div>
 
-    <h2>Car Listings</h2>
+    <div class="table-container">
 
-    <form action="../controller/AgentCarController.php" method="POST">
-        <?php if (!empty($cars)): ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Year</th>
-                        <th>Color</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Delete Car Listing</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($cars as $car): ?>
+        <h2>Car Listings</h2>
+
+        <form action="../controller/AgentCarController.php" method="POST">
+            <?php if (!empty($cars)): ?>
+                <table>
+                    <thead>
                         <tr>
-                            <td><?php echo htmlspecialchars($car['make']); ?></td>
-                            <td><?php echo htmlspecialchars($car['model']); ?></td>
-                            <td><?php echo htmlspecialchars($car['year']); ?></td>
-                            <td><?php echo htmlspecialchars($car['color']); ?></td>
-                            <td>
-                                <input type="number" name="price[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['price']); ?>">
-                            </td>
-                            <td>
-                                <input type="text" name="description[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['description']); ?>">
-                            </td>
-                            <td>
-                                <button type="submit" class="delete-button" name="delete" value="<?php echo $car['car_id']; ?>">Delete</button>
-                            </td>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Color</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Delete Car Listing</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <button type="submit" class="updateCarList" name="update">Update</button>
-        <?php else: ?>
-            <h2>No cars found.</h2>
-        <?php endif; ?>
-    </form>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($cars as $car): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($car['make']); ?></td>
+                                <td><?php echo htmlspecialchars($car['model']); ?></td>
+                                <td><?php echo htmlspecialchars($car['year']); ?></td>
+                                <td><?php echo htmlspecialchars($car['color']); ?></td>
+                                <td>
+                                    <input type="number" name="price[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['price']); ?>">
+                                </td>
+                                <td>
+                                    <input type="text" name="description[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['description']); ?>">
+                                </td>
+                                <td>
+                                    <button type="submit" class="delete-button" name="delete" value="<?php echo $car['car_id']; ?>">Delete</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <button type="submit" class="updateCarList" name="update">Update</button>
+            <?php else: ?>
+                <h2>No cars found.</h2>
+            <?php endif; ?>
+        </form>
+    </div>
 </body>
 
 </html>

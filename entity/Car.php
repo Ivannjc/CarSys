@@ -23,37 +23,47 @@ class Car
 
         return $conn;
     }
-
-    // Get all cars created by a specific user
-    public function getAllCars($created_by, $filters = [])
+    public function getAllCars($filters = [])
     {
-        $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars WHERE created_by = ?";
+        $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars";
 
-        $params = [$created_by];
-        $types = 's';
+        // Prepare the filter conditions
+        $params = [];
+        $types = '';
 
         if (!empty($filters['make'])) {
-            $query .= " AND make LIKE ?";
+            $query .= " WHERE make LIKE ?";
             $params[] = '%' . $filters['make'] . '%';
-            $types .= 's';
+            $types = 's';
         }
+
         if (!empty($filters['model'])) {
-            $query .= " AND model LIKE ?";
+            $query .= (empty($params) ? " WHERE" : " AND") . " model LIKE ?";
             $params[] = '%' . $filters['model'] . '%';
             $types .= 's';
         }
+
         if (!empty($filters['year'])) {
-            $query .= " AND year = ?";
-            $params[] = $filters['year'];
-            $types .= 'i';
+            $query .= (empty($params) ? " WHERE" : " AND") . " year LIKE ?";
+            $params[] = '%' . $filters['year'] . '%';
+            $types .= 's';
         }
 
+        // Prepare and execute the query
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param($types, ...$params);
+        if ($types) {
+            $stmt->bind_param($types, ...$params);
+        }
         $stmt->execute();
         $result = $stmt->get_result();
 
-        return $result->fetch_all(MYSQLI_ASSOC);
+        // Fetch and return all cars
+        $cars = [];
+        while ($row = $result->fetch_assoc()) {
+            $cars[] = $row;
+        }
+
+        return $cars;
     }
 
     // Add a new car to the database
@@ -172,7 +182,7 @@ class Car
         return $row['description'] ?? '';
     }
 
-    public function getAllCarsAgent($created_by, $filters = [], $role_id)
+    public function getAllCarsAgent($filters = [], $role_id)
     {
         // Base query
         $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars";
@@ -183,7 +193,6 @@ class Car
         // If role_id is not 5, add the created_by filter
         if ($role_id != 5) {
             $query .= " WHERE created_by = ?";
-            $params[] = $created_by;
             $types .= 's';
             $whereAdded = true;
         }

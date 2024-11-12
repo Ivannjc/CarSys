@@ -2,25 +2,26 @@ body {
     font-family: 'Arial', sans-serif;
     background-image: url('https://digitalsynopsis.com/wp-content/uploads/2014/06/supercar-wallpapers-bugatti-1.jpg');
     background-size: cover;
+    background-attachment: fixed; 
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 100vh;
     margin: 0;
-    text-align: center; /* Moved to avoid redundancy */
+    text-align: center; 
+    padding-top: 60px; /* Added padding to offset the fixed navbar */
 }
-
-
 
 .navbar {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: #ffffff;
     padding: 10px;
-    position: absolute;
+    position: fixed; /* Set position to fixed to make the navbar stay at the top */
     top: 0;
+    left: 0; /* Ensures the navbar spans full width */
     width: 100%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -74,8 +75,10 @@ button:hover {
 table {
     border-collapse: collapse;
     width: 50%;
-    margin: 20px auto; /* Added margin for spacing */
+    margin: 0 auto; /* Added margin for spacing */
     background-color: rgba(255, 255, 255, 0.9);
+    margin-top: 0; /* Ensure it's at the top, no additional margin */
+
 }
 
 th,
@@ -151,7 +154,7 @@ th {
     display: flex;
     flex-direction: column;
     align-items: center; 
-    margin-top: 60px; 
+    margin-top: 80px; /* Added margin-top to avoid overlap with navbar */
     color: #eeeeee; 
 }
 
@@ -213,4 +216,8 @@ button {
     background-color: #0056b3; /* Change background color on hover */
 }
 
-
+.table-container {
+    margin-top: 50px; /* Adjust for navbar height */
+    padding: 10px;
+    overflow-x: auto;
+}

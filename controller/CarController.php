@@ -10,9 +10,9 @@ class CarController
         $this->car = new Car();
     }
 
-    public function getCarListings($created_by, $filters = [])
+    public function getCarListings($filters = [])
     {
-        return $this->car->getAllCars($created_by, $filters);
+        return $this->car->getAllCars( $filters);
     }
 
     public function addCar($make, $model, $year, $color, $price, $description, $created_by)

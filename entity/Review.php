@@ -20,9 +20,19 @@ class Review
 
     public function addReview($user_id, $car_id, $review_text)
     {
-        $stmt = $this->conn->prepare("INSERT INTO reviews (user_id, car_id, review_text) VALUES (?, ?, ?)");
-        $stmt->bind_param("iis", $user_id, $car_id, $review_text);
-        return $stmt->execute();
+        if ($this->conn) {
+            $stmt = $this->conn->prepare("INSERT INTO reviews (user_id, car_id, review_text) VALUES (?, ?, ?)");
+            $stmt->bind_param("iis", $user_id, $car_id, $review_text);
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                error_log("Failed to execute query: " . $stmt->error); // Log error for debugging
+                return false;
+            }
+        } else {
+            error_log("Database connection not established."); // Log connection issue
+            return false;
+        }
     }
 
     public function getAllReviews()

@@ -10,12 +10,11 @@ class AgentCarController
         $this->car = new Car();
     }
 
-    public function getCarListings($created_by, $filters = [], $role_id)
+    public function getCarListings($filters = [], $role_id)
     {
-        // Pass $role_id to Car model to determine whether to apply created_by filter
-        return $this->car->getAllCarsAgent($created_by, $filters, $role_id);
+        // Only pass the filters and role_id, without created_by
+        return $this->car->getAllCarsAgent($filters, $role_id);
     }
-
 
     public function addCar($make, $model, $year, $color, $price, $description, $created_by)
     {
@@ -45,7 +44,7 @@ class AgentCarController
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start();
     $carController = new AgentCarController();
-    $created_by = $_SESSION['email']; // Assuming 'email' is stored in session
+    $created_by = $_SESSION['email'];  // Still needed for addCar method, not for search
 
     if (isset($_POST['add'])) {
         $make = $_POST['make'];
@@ -55,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price = $_POST['price'];
         $description = $_POST['description'];
 
-        // Add car using the controller and session email as created_by
         if ($carController->addCar($make, $model, $year, $color, $price, $description, $created_by)) {
             header("Location: ../boundary/agentCarListings.php?message=Car added successfully");
         } else {
@@ -72,28 +70,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Check if a delete request has been made
-    if (isset($_POST['delete']) && isset($_POST['delete'])) {
-        $carId = $_POST['delete'];  // 'delete' now contains the car_id
-        $carController->deleteCar($carId); // Calls the deleteCar method
+    if (isset($_POST['delete'])) {
+        $carId = $_POST['delete'];
+        $carController->deleteCar($carId);
         header("Location: ../boundary/agentCarListings.php?message=Car listing deleted successfully");
         exit;
     }
 
-    // Check if a view_description request has been made
     if (isset($_POST['view_description'])) {
-        $car_id = $_POST['car_id']; // Get the car_id from the request
-
-        // Create an instance of the Car class
+        $car_id = $_POST['car_id'];
         $carModel = new Car();
-
-        // Increment view count for the car
         $carModel->incrementViewCount($car_id);
-
-        // Get the car's description
         $description = $carModel->getCarDescription($car_id);
-
-        // Return the description in JSON format
         echo json_encode(['description' => $description]);
         exit;
     }
