@@ -94,44 +94,7 @@ class Car
         return $stmt->execute();
     }
 
-    // Fetch all cars for buyers with optional filters
-    public function getAllCarsForBuyer($filters = [])
-    {
-        $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars";
-        $params = [];
-        $types = '';
-        $whereClauses = [];
-
-        if (!empty($filters['make'])) {
-            $whereClauses[] = "make LIKE ?";
-            $params[] = '%' . $filters['make'] . '%';
-            $types .= 's';
-        }
-        if (!empty($filters['model'])) {
-            $whereClauses[] = "model LIKE ?";
-            $params[] = '%' . $filters['model'] . '%';
-            $types .= 's';
-        }
-        if (!empty($filters['year'])) {
-            $whereClauses[] = "year = ?";
-            $params[] = $filters['year'];
-            $types .= 'i';
-        }
-
-        if ($whereClauses) {
-            $query .= " WHERE " . implode(" AND ", $whereClauses);
-        }
-
-        $stmt = $this->conn->prepare($query);
-        if ($params) {
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
+    
     // Save a car to a user's saved cars list
     public function saveCar($car_id, $user_id)
     {
@@ -182,69 +145,69 @@ class Car
         return $row['description'] ?? '';
     }
 
-    public function getAllCarsAgent($filters = [], $role_id)
-    {
-        // Base query
-        $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars";
-        $params = [];
-        $types = '';
-        $whereAdded = false;  // Track if WHERE has been added
+    // public function getAllCarsAgent($filters = [], $role_id)
+    // {
+    //     // Base query
+    //     $query = "SELECT car_id, make, model, year, color, price, description, view_count FROM cars";
+    //     $params = [];
+    //     $types = '';
+    //     $whereAdded = false;  // Track if WHERE has been added
 
-        // If role_id is not 5, add the created_by filter
-        if ($role_id != 5) {
-            $query .= " WHERE created_by = ?";
-            $types .= 's';
-            $whereAdded = true;
-        }
+    //     // If role_id is not 5, add the created_by filter
+    //     if ($role_id != 5) {
+    //         $query .= " WHERE created_by = ?";
+    //         $types .= 's';
+    //         $whereAdded = true;
+    //     }
 
-        // Add filters to the query if provided
-        if (!empty($filters['make'])) {
-            // Use WHERE if none has been added, else use AND
-            if ($whereAdded) {
-                $query .= " AND";
-            } else {
-                $query .= " WHERE";
-                $whereAdded = true;
-            }
-            $query .= " make LIKE ?";
-            $params[] = '%' . $filters['make'] . '%';
-            $types .= 's';
-        }
+    //     // Add filters to the query if provided
+    //     if (!empty($filters['make'])) {
+    //         // Use WHERE if none has been added, else use AND
+    //         if ($whereAdded) {
+    //             $query .= " AND";
+    //         } else {
+    //             $query .= " WHERE";
+    //             $whereAdded = true;
+    //         }
+    //         $query .= " make LIKE ?";
+    //         $params[] = '%' . $filters['make'] . '%';
+    //         $types .= 's';
+    //     }
 
-        if (!empty($filters['model'])) {
-            // Use AND if WHERE has been added already
-            if ($whereAdded) {
-                $query .= " AND";
-            } else {
-                $query .= " WHERE";
-                $whereAdded = true;
-            }
-            $query .= " model LIKE ?";
-            $params[] = '%' . $filters['model'] . '%';
-            $types .= 's';
-        }
+    //     if (!empty($filters['model'])) {
+    //         // Use AND if WHERE has been added already
+    //         if ($whereAdded) {
+    //             $query .= " AND";
+    //         } else {
+    //             $query .= " WHERE";
+    //             $whereAdded = true;
+    //         }
+    //         $query .= " model LIKE ?";
+    //         $params[] = '%' . $filters['model'] . '%';
+    //         $types .= 's';
+    //     }
 
-        if (!empty($filters['year'])) {
-            // Use AND for year filter
-            if ($whereAdded) {
-                $query .= " AND";
-            } else {
-                $query .= " WHERE";
-                $whereAdded = true;
-            }
-            $query .= " year = ?";
-            $params[] = $filters['year'];
-            $types .= 'i';
-        }
+    //     if (!empty($filters['year'])) {
+    //         // Use AND for year filter
+    //         if ($whereAdded) {
+    //             $query .= " AND";
+    //         } else {
+    //             $query .= " WHERE";
+    //             $whereAdded = true;
+    //         }
+    //         $query .= " year = ?";
+    //         $params[] = $filters['year'];
+    //         $types .= 'i';
+    //     }
 
-        // Prepare and execute the query
-        $stmt = $this->conn->prepare($query);
-        if ($params) {
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
+    //     // Prepare and execute the query
+    //     $stmt = $this->conn->prepare($query);
+    //     if ($params) {
+    //         $stmt->bind_param($types, ...$params);
+    //     }
+    //     $stmt->execute();
+    //     $result = $stmt->get_result();
 
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
+    //     return $result->fetch_all(MYSQLI_ASSOC);
+    // }
 }

@@ -10,10 +10,9 @@ class AgentCarController
         $this->car = new Car();
     }
 
-    public function getCarListings($filters = [], $role_id)
+    public function getAllCars($filters = [])
     {
-        // Only pass the filters and role_id, without created_by
-        return $this->car->getAllCarsAgent($filters, $role_id);
+        return $this->car->getAllCars($filters); // Pass filters to the Car model
     }
 
     public function addCar($make, $model, $year, $color, $price, $description, $created_by)

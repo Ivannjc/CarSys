@@ -11,9 +11,9 @@ class BuyerCarController
     }
 
     // Fetch all cars for buyers (without the created_by filter)
-    public function getAllCars()
+    public function getAllCars($filters = [])
     {
-        return $this->car->getAllCarsForBuyer(); // Now using the new method for buyers
+        return $this->car->getAllCars($filters); // Pass filters to the Car model
     }
 
     public function getSavedCars($user_id)

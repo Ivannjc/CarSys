@@ -15,12 +15,7 @@
             }
         };
     </script>
-    <style>
-        .table-container {
-            margin-top: 7700px;
-            /* Adjust this based on the height of your navbar */
-        }
-    </style>
+
 </head>
 
 <body>
@@ -28,8 +23,8 @@
     session_start();
     include '../controller/AgentCarController.php';
 
-    $created_by = $_SESSION['email'];
-    $role_id = $_SESSION['role_id']; // Assuming role_id is set in session
+    $created_by = $_SESSION['email']; // Get logged-in agent's email
+    $role_id = $_SESSION['role_id'];
 
     $agentCarController = new AgentCarController();
 
@@ -39,7 +34,7 @@
     if (!empty($_GET['year'])) $filters['year'] = $_GET['year'];
 
     // Fetch cars based on role_id
-    $cars = $agentCarController->getCarListings( $filters, $role_id);
+    $cars = $agentCarController->getAllCars($filters);
     ?>
 
     <div class="navbar">
@@ -58,7 +53,6 @@
     </div>
 
     <div class="table-container">
-
         <h2>Car Listings</h2>
 
         <form action="../controller/AgentCarController.php" method="POST">
@@ -72,6 +66,7 @@
                             <th>Color</th>
                             <th>Price</th>
                             <th>Description</th>
+                            <th>Number of Views</th>
                             <th>Delete Car Listing</th>
                         </tr>
                     </thead>
@@ -88,6 +83,8 @@
                                 <td>
                                     <input type="text" name="description[<?php echo $car['car_id']; ?>]" value="<?php echo htmlspecialchars($car['description']); ?>">
                                 </td>
+                                <td><?php echo htmlspecialchars($car['view_count']); ?></td>
+
                                 <td>
                                     <button type="submit" class="delete-button" name="delete" value="<?php echo $car['car_id']; ?>">Delete</button>
                                 </td>
@@ -95,11 +92,14 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                <br>
                 <button type="submit" class="updateCarList" name="update">Update</button>
             <?php else: ?>
                 <h2>No cars found.</h2>
             <?php endif; ?>
         </form>
+    </div>
+
     </div>
 </body>
 
