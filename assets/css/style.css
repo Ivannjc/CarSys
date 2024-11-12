@@ -11,6 +11,7 @@ body {
     margin: 0;
     text-align: center; 
     padding-top: 60px; /* Added padding to offset the fixed navbar */
+    overflow: hidden;
 }
 
 .navbar {
@@ -217,7 +218,8 @@ button {
 }
 
 .table-container {
-    margin-top: 50px; /* Adjust for navbar height */
+    margin-top: 50px; 
     padding: 10px;
     overflow-x: auto;
+    width: 98%;
 }
