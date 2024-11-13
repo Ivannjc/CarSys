@@ -1,5 +1,6 @@
 <?php
 include '../controller/AgentCarController.php';
+session_start();
 
 $message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -96,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="navbar">
+    <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="agentCarListings.php">View Car Listings</a>
         <a href="agentAddCarListings.php">Create Car Listing</a>
         <a href="agentViewReviews.php">View Reviews</a>

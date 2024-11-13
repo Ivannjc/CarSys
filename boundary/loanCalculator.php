@@ -1,6 +1,10 @@
 <?php
 include '../controller/LoanCalcController.php';
 ?>
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,6 +94,7 @@ include '../controller/LoanCalcController.php';
 
 <body>
     <div class="navbar">
+    <span class="welcome-message" style="color: black;">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
     <a href="buyerCarListings.php">View Car Listings</a>
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>

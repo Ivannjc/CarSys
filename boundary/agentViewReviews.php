@@ -1,6 +1,7 @@
 <?php
 // Include the controller to get access to $reviews
 include '../controller/AgentReviewController.php';
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +14,7 @@ include '../controller/AgentReviewController.php';
 
 <body>
     <div class="navbar">
+    <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="agentCarListings.php">View Car Listings</a>
         <a href="agentAddCarListings.php">Create Car Listing</a>
         <a href="agentViewReviews.php">View Reviews</a>
