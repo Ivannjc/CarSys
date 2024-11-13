@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,6 +69,7 @@
 </head>
 
 <body>
+<h2 class="welcome-message" style="color: white;">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</>
     <h2>User Admin Dashboard</h2>
 
     <form>

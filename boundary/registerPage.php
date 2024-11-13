@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,6 +12,7 @@
 
 <body>
     <div class="navbar">
+    <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="useradminPage.php">Home</a>
         <a href="registerPage.php">Create User</a>
         <a href="manageProfile.php">Manage Profile</a>

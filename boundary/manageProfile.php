@@ -1,5 +1,9 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Create/Delete Profile</title>
@@ -23,6 +27,7 @@
 
 <body>
     <div class="navbar">
+        <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="useradminPage.php">Home</a>
         <a href="registerPage.php">Create User</a>
         <a href="manageProfile.php">Manage Profile</a>
@@ -38,47 +43,50 @@
         </form>
     </div>
 
-    <div class="content">
-        <h2>Create or Remove a Profile</h2>
-        <?php
-        include '../controller/UserAccountController.php';
-        $userAdmin = new UserAdmin();
+    <div class="table-container">
+        <div class="content">
+            <h2>Create or Remove a Profile</h2>
+            <?php
+            include '../controller/UserAccountController.php';
+            $userAdmin = new UserAdmin();
 
-        // Fetch roles from roles table with search filter
-        $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
-        $roles = $userAdmin->getProfiles($searchTerm);
-        ?>
+            // Fetch roles from roles table with search filter
+            $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+            $roles = $userAdmin->getProfiles($searchTerm);
+            ?>
 
-        <div class="centered-form">
+            <div class="centered-form">
+                <form action="../controller/ProfileController.php" method="POST">
+                    <input type="text" name="roleName" placeholder="Enter role name" required>
+                    <button type="submit" name="action" value="create">Create</button>
+                    <button type="submit" name="action" value="delete" class="delete-button">Delete</button>
+                </form>
+            </div>
+
+            <!-- Table to Display and Edit Roles -->
+            <h2>Edit User Profiles</h2>
             <form action="../controller/ProfileController.php" method="POST">
-                <input type="text" name="roleName" placeholder="Enter role name" required>
-                <button type="submit" name="action" value="create">Create</button>
-                <button type="submit" name="action" value="delete" class="delete-button">Delete</button>
+                <table>
+                    <tr>
+                        <th>Profile Name</th>
+                        <th>Action</th>
+                    </tr>
+                    <?php foreach ($roles as $role): ?>
+                        <?php if ($role !== 'Others'): ?>
+                            <tr>
+                                <td>
+                                    <input type="text" name="updatedRoles[<?php echo htmlspecialchars($role); ?>]" value="<?php echo htmlspecialchars($role); ?>" />
+                                </td>
+                                <td>
+                                    <button type="submit" name="update" value="<?php echo htmlspecialchars($role); ?>">Update</button>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </table>
             </form>
         </div>
-
-        <!-- Table to Display and Edit Roles -->
-        <h2>Edit User Profiles</h2>
-        <form action="../controller/ProfileController.php" method="POST">
-            <table>
-                <tr>
-                    <th>Profile Name</th>
-                    <th>Action</th>
-                </tr>
-                <?php foreach ($roles as $role): ?>
-                    <?php if ($role !== 'Others'): ?>
-                    <tr>
-                        <td>
-                            <input type="text" name="updatedRoles[<?php echo htmlspecialchars($role); ?>]" value="<?php echo htmlspecialchars($role); ?>" />
-                        </td>
-                        <td>
-                            <button type="submit" name="update" value="<?php echo htmlspecialchars($role); ?>">Update</button>
-                        </td>
-                    </tr>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </table>
-        </form>
     </div>
 </body>
+
 </html>
