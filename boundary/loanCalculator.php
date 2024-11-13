@@ -90,10 +90,11 @@ include '../controller/LoanCalcController.php';
 
 <body>
     <div class="navbar">
-        <a href="buyerCarListings.php">View Car Listings</a>
+    <a href="buyerCarListings.php">View Car Listings</a>
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>
-        <a href="buyerViewReviews.php">View Car Reviews</a>
+        <a href="buyerAgentAccounts.php">View Agents</a>
+        <a href="buyerAgentReviews.php">View Agent Reviews</a>
 
         <form action="../controller/logoutController.php" method="POST" style="display:inline;">
             <button class="logout-button" type="submit">Logout</button>

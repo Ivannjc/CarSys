@@ -174,7 +174,6 @@ session_start();
                                 <th>Price</th>
                                 <th>Description</th>
                                 <th>Number of Views</th>
-                                <th>Review Car</th>
                                 <th>Delete Car Listing</th>
                             </tr>
                         </thead>
@@ -194,9 +193,7 @@ session_start();
                                     <td>
                                         <?php echo htmlspecialchars($car['view_count']); ?>
                                     </td>
-                                    <td>
-                                        <button type="button" onclick="openReviewForm(<?php echo $car['car_id']; ?>)">Review</button>
-                                    </td>
+                                    
                                     <td>
                                         <button type="submit" class="delete-button" name="delete" value="<?php echo $car['car_id']; ?>">Delete</button>
                                     </td>

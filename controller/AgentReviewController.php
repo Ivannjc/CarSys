@@ -50,7 +50,7 @@ class AgentReviewController
             }
 
             // Add the review to the database
-            $result = $agent->addReview($reviewer_id, $agent_id, $review_text, $rating);
+            $result = $agent->addReview( $agent_id, $review_text, $rating);
 
             if ($result) {
                 echo json_encode(['success' => true, 'message' => 'Review submitted successfully']);

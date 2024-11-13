@@ -119,7 +119,8 @@ $cars = $buyerCarController->getAllCars($filters);
         <a href="buyerCarListings.php">View Car Listings</a>
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>
-        <a href="buyerViewReviews.php">View Car Reviews</a>
+        <a href="buyerAgentAccounts.php">View Agents</a>
+        <a href="buyerAgentReviews.php">View Agent Reviews</a>
 
         <form action="buyerCarListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
@@ -146,7 +147,6 @@ $cars = $buyerCarController->getAllCars($filters);
                         <th>Price</th>
                         <th>Description</th>
                         <th>Save Car</th>
-                        <th>Review Car</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -171,9 +171,7 @@ $cars = $buyerCarController->getAllCars($filters);
                                     <button type="submit">Save</button>
                                 </form>
                             </td>
-                            <td>
-                                <button onclick="openReviewForm(<?php echo $car['car_id']; ?>)">Review</button>
-                            </td>
+                    
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

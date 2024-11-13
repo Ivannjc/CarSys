@@ -125,10 +125,9 @@ class Agent
         return $stmt->get_result()->fetch_assoc();
     }
     public function getAgentReviews() {
-        // Replace this with your actual database connection code
         include '../entity/db_connection.php';
 
-        $query = "SELECT username, review_text, rating FROM agent_review";
+        $query = "SELECT username, review, rating FROM agent_review";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
