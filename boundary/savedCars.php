@@ -30,7 +30,7 @@ if (isset($_GET['message'])) {
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>
         <a href="buyerAgentAccounts.php">View Agents</a>
-        <a href="buyerAgentReviews.php">View Agent Reviews</a>
+        <a href="buyerAgentReviews.php">View Reviews</a>
         <form action="../controller/logoutController.php" method="POST" style="display:inline;">
             <button class="logout-button" type="submit">Logout</button>
         </form>

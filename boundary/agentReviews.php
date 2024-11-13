@@ -16,7 +16,7 @@ include '../controller/AgentReviewController.php';
         <a href="carListings.php">View Car Listings</a>
         <a href="addCarListings.php">Create Car Listing</a>
         <a href="agentAccounts.php">View Agents</a>
-        <a href="agentReviews.php">View Agent Reviews</a>
+        <a href="agentReviews.php">View Reviews</a>
         <a href="sellerSavedCars.php">View Saved Cars</a>
         <form action="../controller/logoutController.php" method="POST" style="display:inline;">
             <button class="logout-button" type="submit">Logout</button>

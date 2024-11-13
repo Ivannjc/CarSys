@@ -83,7 +83,7 @@
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>
         <a href="buyerAgentAccounts.php">View Agents</a>
-        <a href="buyerAgentReviews.php">View Agent Reviews</a>
+        <a href="buyerAgentReviews.php">View Reviews</a>
         <form action="buyerAgentAccounts.php" method="GET" class="searchform">
             <input type="text" name="username" placeholder="Search by username" value="<?php echo isset($_GET['username']) ? htmlspecialchars($_GET['username']) : ''; ?>">
             <button type="submit">Search</button>

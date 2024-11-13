@@ -120,7 +120,7 @@ $cars = $buyerCarController->getAllCars($filters);
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>
         <a href="buyerAgentAccounts.php">View Agents</a>
-        <a href="buyerAgentReviews.php">View Agent Reviews</a>
+        <a href="buyerAgentReviews.php">View Reviews</a>
 
         <form action="buyerCarListings.php" method="GET" class="searchform">
             <input type="text" name="make" placeholder="Search by Make" value="<?php echo isset($_GET['make']) ? htmlspecialchars($_GET['make']) : ''; ?>">
