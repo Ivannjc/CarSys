@@ -98,7 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="navbar">
         <a href="carListings.php">View Car Listings</a>
         <a href="addCarListings.php">Create Car Listing</a>
-        <a href="viewReviews.php">View Car Reviews</a>
+        <!-- <a href="viewReviews.php">View Car Reviews</a> -->
+        <a href="agentAccounts.php">View Agents</a>
+        <a href="agentReviews.php">View Agent Reviews</a>
         <a href="sellerSavedCars.php">View Saved Cars</a>
 
         <form action="../controller/logoutController.php" method="POST" style="display:inline;">

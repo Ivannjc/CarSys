@@ -30,5 +30,19 @@ class User
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
+    public function getUserIdByUsername($username)
+    {
+        $sql = "SELECT user_id FROM users WHERE username = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['user_id'];
+        } else {
+            return null; // User not found
+        }
+    }
 }
-?>

@@ -3,7 +3,7 @@ include '../entity/db_connection.php';
 
 class Review
 {
-    private $conn;
+    public $conn;
 
     // Constructor handles database connection internally
     public function __construct()
@@ -35,22 +35,53 @@ class Review
         }
     }
 
-    public function getAllReviews()
+    // public function getAllReviews()
+    // {
+    //     $stmt = $this->conn->prepare("
+    //     SELECT 
+    //         users.username AS user_name,
+    //         cars.make,
+    //         cars.model,
+    //         cars.year,
+    //         cars.color,
+    //         reviews.review_text
+    //     FROM reviews
+    //     JOIN users ON reviews.user_id = users.id
+    //     JOIN cars ON reviews.car_id = cars.car_id
+    // ");
+    //     $stmt->execute();
+    //     $result = $stmt->get_result();
+    //     return $result->fetch_all(MYSQLI_ASSOC);
+    // }
+
+    public function getAgentReviews()
     {
-        $stmt = $this->conn->prepare("
-        SELECT 
-            users.username AS user_name,
-            cars.make,
-            cars.model,
-            cars.year,
-            cars.color,
-            reviews.review_text
-        FROM reviews
-        JOIN users ON reviews.user_id = users.id
-        JOIN cars ON reviews.car_id = cars.car_id
-    ");
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $reviews = [];
+        if ($this->conn) {
+            $query = "
+                SELECT 
+                    users.username AS username,
+                    agent_review.review,
+                    agent_review.rating
+                FROM agent_review
+                JOIN users ON agent_review.user_id = users.id
+            ";
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($result) {
+                    $reviews = $result->fetch_all(MYSQLI_ASSOC);
+                    $stmt->close();
+                } else {
+                    error_log("Error fetching results: " . $this->conn->error);
+                }
+            } else {
+                error_log("Failed to prepare getAgentReviews statement: " . $this->conn->error);
+            }
+        } else {
+            error_log("Database connection not established.");
+        }
+        return $reviews;
     }
 }

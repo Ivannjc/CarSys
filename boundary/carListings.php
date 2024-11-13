@@ -129,8 +129,9 @@ session_start();
     <div class="navbar">
         <a href="carListings.php">View Car Listings</a>
         <a href="addCarListings.php">Create Car Listing</a>
-        <a href="viewReviews.php">View Car Reviews</a>
+        <!-- <a href="viewReviews.php">View Car Reviews</a> -->
         <a href="agentAccounts.php">View Agents</a>
+        <a href="agentReviews.php">View Agent Reviews</a>
         <a href="sellerSavedCars.php">View Saved Cars</a>
 
         <form action="carListings.php" method="GET" class="searchform">

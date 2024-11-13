@@ -95,10 +95,6 @@ class Agent
     }
 
 
-
-
-
-
     public function getAllRoles()
     {
         $query = "SELECT id, role_name FROM roles"; // Fetch both id and role_name
@@ -109,5 +105,32 @@ class Agent
             $roles[] = ['id' => $row['id'], 'role_name' => $row['role_name']];
         }
         return $roles; // Return roles as an array of associative arrays
+    }
+
+    public function addReview($user_id, $review, $rating)
+    {
+        $sql = "INSERT INTO agent_review (user_id, review, rating) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("isi", $user_id, $review, $rating);
+
+        return $stmt->execute();
+    }
+
+    public function getUserByUsername($username)
+    {
+        $query = "SELECT id FROM users WHERE username = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+    public function getAgentReviews() {
+        // Replace this with your actual database connection code
+        include '../entity/db_connection.php';
+
+        $query = "SELECT username, review_text, rating FROM agent_review";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
