@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="navbar">
         <a href="agentCarListings.php">View Car Listings</a>
         <a href="agentAddCarListings.php">Create Car Listing</a>
-        <a href="agentViewReviews.php">View Car Reviews</a>
+        <a href="agentViewReviews.php">View Reviews</a>
         <form action="../controller/logoutController.php" method="POST" style="display:inline;">
             <button class="logout-button" type="submit">Logout</button>
         </form>
