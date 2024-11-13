@@ -1,7 +1,6 @@
 <?php
 // Include the controller to get access to $reviews
 include '../controller/AgentReviewController.php';
-session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">

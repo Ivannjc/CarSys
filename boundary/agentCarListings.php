@@ -38,7 +38,7 @@
     ?>
 
     <div class="navbar">
-    <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
+        <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="agentCarListings.php">View Car Listings</a>
         <a href="agentAddCarListings.php">Create Car Listing</a>
         <a href="agentViewReviews.php">View Reviews</a>
@@ -93,7 +93,6 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <br>
                 <button type="submit" class="updateCarList" name="update">Update</button>
             <?php else: ?>
                 <h2>No cars found.</h2>

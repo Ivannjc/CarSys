@@ -202,7 +202,7 @@ session_start();
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <br>
+                    
                     <button type="submit" class="updateCarList" name="update">Update</button>
                 <?php else: ?>
                     <h2>No cars found.</h2>
