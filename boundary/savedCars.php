@@ -36,46 +36,48 @@ if (isset($_GET['message'])) {
             <button class="logout-button" type="submit">Logout</button>
         </form>
     </div>
+    <div class="table-container">
 
-    <h2>Saved Cars</h2>
+        <h2>Saved Cars</h2>
 
-    <?php if (!empty($savedCars)): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Year</th>
-                    <th>Color</th>
-                    <th>Price</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($savedCars as $car): ?>
+        <?php if (!empty($savedCars)): ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($car['make']); ?></td>
-                        <td><?php echo htmlspecialchars($car['model']); ?></td>
-                        <td><?php echo htmlspecialchars($car['year']); ?></td>
-                        <td><?php echo htmlspecialchars($car['color']); ?></td>
-                        <td><?php echo htmlspecialchars($car['price']); ?></td>
-                        <td><?php echo htmlspecialchars($car['description']); ?></td>
-                        <td>
-                            <form action="../controller/SaveCarController.php" method="POST">
-                                <input type="hidden" name="car_id" value="<?php echo htmlspecialchars($car['car_id']); ?>">
-                                <input type="hidden" name="action" value="unsave">
-                                <button type="submit" class="unsave-button">Unsave</button>
-                            </form>
-                        </td>
-
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Action</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <h2>No saved cars found.</h2>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($savedCars as $car): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($car['make']); ?></td>
+                            <td><?php echo htmlspecialchars($car['model']); ?></td>
+                            <td><?php echo htmlspecialchars($car['year']); ?></td>
+                            <td><?php echo htmlspecialchars($car['color']); ?></td>
+                            <td><?php echo htmlspecialchars($car['price']); ?></td>
+                            <td><?php echo htmlspecialchars($car['description']); ?></td>
+                            <td>
+                                <form action="../controller/SaveCarController.php" method="POST">
+                                    <input type="hidden" name="car_id" value="<?php echo htmlspecialchars($car['car_id']); ?>">
+                                    <input type="hidden" name="action" value="unsave">
+                                    <button type="submit" class="unsave-button">Unsave</button>
+                                </form>
+                            </td>
+
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <h2>No saved cars found.</h2>
+        <?php endif; ?>
+    </div>
 </body>
 
 </html>

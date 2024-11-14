@@ -25,7 +25,7 @@ if (isset($_GET['message'])) {
 
 <body>
     <div class="navbar">
-    <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
+        <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="carListings.php">View Car Listings</a>
         <a href="addCarListings.php">Create Car Listing</a>
         <a href="agentAccounts.php">View Agents</a>
@@ -36,39 +36,41 @@ if (isset($_GET['message'])) {
             <button class="logout-button" type="submit">Logout</button>
         </form>
     </div>
+    <div class="table-container">
 
-    <h2>Saved Cars</h2>
+        <h2>Saved Cars</h2>
 
-    <?php if (!empty($savedCars)): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Year</th>
-                    <th>Color</th>
-                    <th>Price</th>
-                    <th>Description</th>
-                    <th>User</th> <!-- Display user who saved the car -->
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($savedCars as $car): ?>
+        <?php if (!empty($savedCars)): ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($car['make']); ?></td>
-                        <td><?php echo htmlspecialchars($car['model']); ?></td>
-                        <td><?php echo htmlspecialchars($car['year']); ?></td>
-                        <td><?php echo htmlspecialchars($car['color']); ?></td>
-                        <td><?php echo htmlspecialchars($car['price']); ?></td>
-                        <td><?php echo htmlspecialchars($car['description']); ?></td>
-                        <td><?php echo htmlspecialchars($car['username']); ?></td> <!-- Display the username -->
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>User</th> <!-- Display user who saved the car -->
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <h2>No saved cars found.</h2>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($savedCars as $car): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($car['make']); ?></td>
+                            <td><?php echo htmlspecialchars($car['model']); ?></td>
+                            <td><?php echo htmlspecialchars($car['year']); ?></td>
+                            <td><?php echo htmlspecialchars($car['color']); ?></td>
+                            <td><?php echo htmlspecialchars($car['price']); ?></td>
+                            <td><?php echo htmlspecialchars($car['description']); ?></td>
+                            <td><?php echo htmlspecialchars($car['username']); ?></td> <!-- Display the username -->
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <h2>No saved cars found.</h2>
+        <?php endif; ?>
+    </div>
 </body>
 
 </html>

@@ -2,9 +2,7 @@
 // Include the controller to get access to $reviews
 include '../controller/AgentReviewController.php';
 ?>
-<?php
-session_start();
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +15,7 @@ session_start();
 
 <body>
     <div class="navbar">
-    <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
+        <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="buyerCarListings.php">View Car Listings</a>
         <a href="savedCars.php">View Saved Cars</a>
         <a href="loanCalculator.php">Loan Calculator</a>
@@ -27,31 +25,33 @@ session_start();
             <button class="logout-button" type="submit">Logout</button>
         </form>
     </div>
+    <div class="table-container">
+        <h2>Agent Reviews</h2>
 
-    <h2>Agent Reviews</h2>
-
-    <?php if (empty($reviews)) : ?>
-        <h2>No reviews found.</h2>
-    <?php else : ?>
-        <table class="review-table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Review</th>
-                    <th>Rating</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($reviews as $review) : ?>
+        <?php if (empty($reviews)) : ?>
+            <h2>No reviews found.</h2>
+        <?php else : ?>
+            <table class="review-table">
+                <thead>
                     <tr>
-                        <td><?= htmlspecialchars($review['username']) ?></td>
-                        <td><?= htmlspecialchars($review['review']) ?></td>
-                        <td><?= htmlspecialchars($review['rating']) ?></td>
+                        <th>Username</th>
+                        <th>Review</th>
+                        <th>Rating</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($reviews as $review) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($review['username']) ?></td>
+                            <td><?= htmlspecialchars($review['review']) ?></td>
+                            <td><?= htmlspecialchars($review['rating']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+    <br>
 </body>
 
 </html>

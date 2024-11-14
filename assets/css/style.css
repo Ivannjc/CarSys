@@ -219,6 +219,7 @@ button {
 
 .table-container {
     margin-top: 50px; 
+    margin-bottom: 20px;
     padding: 10px;
     overflow-x: auto;
     width: 98%;

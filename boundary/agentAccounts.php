@@ -79,7 +79,7 @@
 <body>
     <div id="overlay" onclick="closeReviewPopup()"></div>
     <div class="navbar">
-    <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
+        <span class="welcome-message">Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest'; ?>!</span>
         <a href="carListings.php">View Car Listings</a>
         <a href="addCarListings.php">Create Car Listing</a>
         <a href="agentAccounts.php">View Agents</a>
@@ -93,37 +93,39 @@
             <button class="logout-button" type="submit">Logout</button>
         </form>
     </div>
+    <div class="table-container">
 
-    <h2>Agent Accounts</h2>
+        <h2>Agent Accounts</h2>
 
-    <?php
-    include '../controller/AgentAccController.php';
+        <?php
+        include '../controller/AgentAccController.php';
 
-    if (!empty($userAccounts)) {
-    ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Profile</th>
-                    <th>Review Account</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($userAccounts as $user): ?>
+        if (!empty($userAccounts)) {
+        ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($user['username']); ?></td>
-                        <td><?php echo htmlspecialchars($user['email']); ?></td>
-                        <td><?php echo htmlspecialchars($user['role']); ?></td>
-                        <td><button type="button" onclick="openReviewPopup('<?php echo htmlspecialchars($user['username']); ?>')">Review</button></td>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Profile</th>
+                        <th>Review Account</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php } else { ?>
-        <p style="color: white;">No agent accounts found.</p>
-    <?php } ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($userAccounts as $user): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($user['username']); ?></td>
+                            <td><?php echo htmlspecialchars($user['email']); ?></td>
+                            <td><?php echo htmlspecialchars($user['role']); ?></td>
+                            <td><button type="button" onclick="openReviewPopup('<?php echo htmlspecialchars($user['username']); ?>')">Review</button></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php } else { ?>
+            <p style="color: white;">No agent accounts found.</p>
+        <?php } ?>
+    </div>
 
     <!-- Review Popup Form -->
     <div id="reviewForm">
@@ -154,26 +156,26 @@
             const formData = new FormData(form);
 
             fetch('../controller/AgentReviewController.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message || "Review submitted successfully!");
-                    closeReviewPopup();
-                } else {
-                    alert(data.message || "Error submitting review.");
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message || "Review submitted successfully!");
+                        closeReviewPopup();
+                    } else {
+                        alert(data.message || "Error submitting review.");
+                        closeReviewPopup();
+
+                    }
+                })
+                .catch(error => {
+                    alert("Review submitted successfully!");
+                    console.error('Error:', error);
                     closeReviewPopup();
 
-                }
-            })
-            .catch(error => {
-                alert("Review submitted successfully!");
-                console.error('Error:', error);
-                closeReviewPopup();
-
-            });
+                });
         }
     </script>
 </body>
